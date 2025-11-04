@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+  <h1>API Test</h1>
+  <button onclick="callAPI()">Call /greet</button>
+  <pre id="output"></pre>
+
+    <script>
+        async function callAPI()
+        {
+            const name = "Timéo";
+            const res = await fetch('http://localhost:8000/');
+            const data = await res.json();
+            document.getElementById("output").textContent = data.message;
+        }
+    </script>
+</body>
+</html>
