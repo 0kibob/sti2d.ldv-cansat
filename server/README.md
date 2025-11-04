@@ -1,9 +1,23 @@
-# Server using FastAPI
+# 🚀 Server using FastAPI
 
+## 📦 Installation
 Install dependencies:
+```bash
+pip install fastapi uvicorn
+```
 
-* pip install fastapi uvicorn
+## ▶️ Run the server
+```bash
+python server.py
+```
 
-Run:
+## 🐳 Docker
+Build image:
+```bash
+docker build --tag cansat-server .
+```
 
-* python server.py
+Run container:
+```bash
+docker run -d -p 8000:8000 cansat-server
+```
