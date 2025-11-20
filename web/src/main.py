@@ -8,7 +8,7 @@ from flask import session
 app: Flask = Flask(__name__)
 
 @app.route('/')
-def home():
+def home() -> str:
     return render_template('test.html')
 
 if not __name__ == "__main__": quit()
