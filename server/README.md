@@ -1,23 +1,49 @@
-# 🚀 Server using FastAPI
+# SampleCan - Data Server (FastAPI)
 
-## 📦 Installation
-Install dependencies:
+## Contents
+
+* [Introduction](#introduction)
+* [Development](#developement)
+* [Deployments](#deployments)
+
+## Introduction
+
+**SampleCan Data Server** is a lightweight API built with **FastAPI** for serving and managing application data.  
+It is designed to be simple, fast, and easy to deploy for both local development and production environments.
+
+## Development
+#### Prerequisites:
+* `python 3.10+`
+* `pip`
+* `git`
+* `docker`
+
+#### Setup:
+1. Clone the repository
 ```bash
-pip install fastapi uvicorn
+git clone https://github.com/0kibob/sti2d.ldv-cansat.git
+cd server/src
+```
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
 ```
 
-## ▶️ Run the server
+#### Run:
+Simply run the server.py file.
 ```bash
 python server.py
 ```
 
-## 🐳 Docker
+## Deployments
+
+#### Docker
 Build image:
 ```bash
-docker build --tag cansat-server .
+docker build --tag samplecan-data-server .
 ```
 
 Run container:
 ```bash
-docker run -d -p 8000:8000 cansat-server
+docker run -d -p 8000:8000 samplecan-data-server
 ```

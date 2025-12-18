@@ -1,1 +1,1 @@
-# Sti2d.ldv - Project Cansat
+# SampleCan - Project Cansat
