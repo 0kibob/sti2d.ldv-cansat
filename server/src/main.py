@@ -19,6 +19,10 @@ async def home():
 async def greet(name: str = "World"):
     return {"greeting": f"Hello {name}"}
 
+@app.get("/missions")
+async def missions(id: int | None = None):
+    return {"mission": "none"} if id == None else {"mission": id}
+
 # Then test:
 
 # GET http://localhost:8000/ → {"message":"Server is online"}
