@@ -8,7 +8,7 @@
 
 ## Introduction
 
-**SampleCan Data Server** is a lightweight API built with **FastAPI** for serving and managing application data.  
+**SampleCan Data Server** is a lightweight API built with **FastAPI** and **SQlite** for serving and managing application data.  
 It is designed to be simple, fast, and easy to deploy for both local development and production environments.
 
 ## Development
@@ -37,13 +37,19 @@ python server.py
 
 ## Deployments
 
-#### Docker
+#### > Docker
 Build image:
 ```bash
 docker build --tag samplecan-data-server .
 ```
 
 Run container:
+##### Window:
 ```bash
-docker run -d -p 8000:8000 samplecan-data-server
+docker run -d -p 8000:8000 -v "${PWD}\data:/app/data" samplecan-data-server
+```
+
+##### Linux:
+```bash
+docker run -d -p 8000:8000 -v "$(pwd)/data:/app/data" samplecan-data-server
 ```

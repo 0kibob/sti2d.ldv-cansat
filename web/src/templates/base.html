@@ -7,7 +7,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/black.webstyle_framework.css') }}">
     {% block head %}{% endblock %}
 </head>
-<body class="bg-background flex flex-col">
+<body class="flex flex-col">
+    <div class="fixed w-full h-full" style="z-index: -1; background: radial-gradient(125% 125% at 50% 150%, var(--muted) 20%, var(--background) 100%);" ></div>
     {% block body %}{% endblock %}
 </body>
 </html>
+
+
+<!-- radial-gradient(circle at top, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.08) 20%, rgba(0, 0, 0, 0.0) 60%) -->
+
+
+
+
+<!-- style="background: radial-gradient(125% 125% at 50% 90%, var(--background) 40%, var(--muted) 100%);" -->
+
+

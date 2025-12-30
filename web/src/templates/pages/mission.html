@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %} Missions - {% endblock %}
+
+{% block head %}
+<script src="{{ url_for('static', filename='script/mission.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+{% include 'components/navbar.html' %}
+
+<div id="mission"></div>
+{% endblock %}

@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron/main')
+const { app, BrowserWindow, Menu } = require('electron/main')
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -6,7 +6,15 @@ const createWindow = () => {
         height: 720
     })
 
-    win.loadFile('index.html')
+    win.loadFile('src/index.html')
+    Menu.setApplicationMenu(null);
+
+    win.webContents.on('before-input-event', (event, input) => {
+        if (input.key === 'F12') {
+            win.webContents.toggleDevTools()
+            event.preventDefault()
+        }
+    })
 }
 
 app.whenReady().then(() => {
