@@ -1,15 +1,15 @@
 {
-  "name": "samplecan",
-  "version": "1.0.0",
-  "description": "",
-  "license": "MIT",
-  "author": "Timéo LAURET",
-  "type": "commonjs",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron ."
-  },
-  "devDependencies": {
-    "electron": "^39.2.7"
-  }
+    "name": "samplecan",
+    "version": "1.0.0",
+    "description": "",
+    "license": "MIT",
+    "author": "Timéo LAURET",
+    "type": "commonjs",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "devDependencies": {
+        "electron": "^39.2.7"
+    }
 }

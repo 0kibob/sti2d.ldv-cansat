@@ -28,10 +28,14 @@ cd web/src
 pip install -r requirements.txt
 ```
 
-#### Run:
+#### Run (Development / Debug):
 Simply run the server.py file.
 ```bash
 python main.py
+```
+The server will be available at:
+```bash
+http://127.0.0.1:5000
 ```
 
 ## Deployments
@@ -44,5 +48,5 @@ docker build --tag samplecan-web-server .
 
 Run container:
 ```bash
-docker run -d -p 8000:8000 samplecan-web-server
+docker run -d -p 5000:5000 samplecan-web-server
 ```

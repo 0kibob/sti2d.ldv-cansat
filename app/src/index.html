@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-        <meta
-        http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self'"
-        />
-        <meta
-        http-equiv="X-Content-Security-Policy"
-        content="default-src 'self'; script-src 'self'"
-        />
-        <title>Hello from Electron renderer!</title>
-    </head>
-    <body>
-        <h1>Hello from Electron renderer!</h1>
-        <p>👋</p>
-    </body>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"/>
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'"/>
+    <title>SampleCan - Dashboard</title>
+    <link rel="stylesheet" href="assets/black.webstyle_framework.css">
+</head>
+<body class="bg-background">
+    <header>
+        <nav>
+            <button data-page="home" class="px-xl py-md r-md text-foreground hover-muted button">Home</button>
+            <button data-page="manage" class="px-xl py-md r-md text-foreground hover-muted button">Missions</button>
+            <button data-page="mission" class="px-xl py-md r-md text-foreground hover-muted button">Mission</button>
+        </nav>
+    </header>
+
+    <main id="content">
+        <!-- Dynamic content goes here -->
+    </main>
+</body>
+<script src="./renderer.js"></script>
 </html>

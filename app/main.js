@@ -1,34 +1,61 @@
-const { app, BrowserWindow, Menu } = require('electron/main')
+const { app, BrowserWindow, Menu, ipcMain } = require('electron/main')
+const path = require('node:path')
 
-const createWindow = () => {
-    const win = new BrowserWindow({
-        width: 1280,
-        height: 720
-    })
+const windowSettings =
+{
+    width: 1280,
+    height: 720,
+    webPreferences:
+    {
+        preload: path.join(__dirname, "src", "preload.js"),
+        contextIsolation: true,
+        nodeIntegration: false
+    }
+};
 
-    win.loadFile('src/index.html')
-    Menu.setApplicationMenu(null);
+function createWindow()
+{
+    const browserWindow = new BrowserWindow(windowSettings);
+    browserWindow.loadFile(path.join(__dirname, "src", "index.html"));
 
-    win.webContents.on('before-input-event', (event, input) => {
-        if (input.key === 'F12') {
-            win.webContents.toggleDevTools()
+    Menu.setApplicationMenu(null)
+
+    browserWindow.webContents.on('before-input-event', (event, input) =>
+    {
+        if (input.key === 'F12')
+        {
+            browserWindow.webContents.toggleDevTools()
             event.preventDefault()
         }
     })
+    return browserWindow;
 }
 
-app.whenReady().then(() => {
-    createWindow()
+function registerIpcHandlers()
+{
+    ipcMain.handle('ping', () => 'pong');
+    // Add more handlers here later
+    // ipcMain.handle('getData', async () => { ... });
+}
 
-    app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow()
+app.whenReady().then(() =>
+{
+    registerIpcHandlers();
+    createWindow();
+
+    app.on('activate', () => 
+    {
+        if (BrowserWindow.getAllWindows().length === 0)
+        {
+            createWindow();
         }
     })
 })
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit()
+app.on('window-all-closed', () =>
+{
+    if (process.platform !== 'darwin')
+    {
+        app.quit();
     }
 })
