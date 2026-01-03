@@ -9,7 +9,7 @@ const windowSettings =
     {
         preload: path.join(__dirname, "src", "preload.js"),
         contextIsolation: true,
-        nodeIntegration: false
+        nodeIntegration: true
     }
 };
 
@@ -28,14 +28,13 @@ function createWindow()
             event.preventDefault()
         }
     })
+    // browserWindow.webContents.toggleDevTools()
     return browserWindow;
 }
 
 function registerIpcHandlers()
 {
-    ipcMain.handle('ping', () => 'pong');
-    // Add more handlers here later
-    // ipcMain.handle('getData', async () => { ... });
+    ipcMain.handle('appVersion', async () => { return app.getVersion(); });
 }
 
 app.whenReady().then(() =>

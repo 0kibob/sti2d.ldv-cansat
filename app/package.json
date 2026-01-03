@@ -11,5 +11,8 @@
     },
     "devDependencies": {
         "electron": "^39.2.7"
+    },
+    "dependencies": {
+        "lucide": "^0.562.0"
     }
 }

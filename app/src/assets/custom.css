@@ -1,0 +1,8 @@
+#sidebar.open #sidebar-chevron svg
+{
+    transform: rotate(180deg);
+    /* transition: transform 0.3s; */
+}
+
+/* Hide nav text when sidebar is collapsed */
+#sidebar:not(.open) .nav-hide { display: none; }

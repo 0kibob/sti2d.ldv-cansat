@@ -1,38 +1,18 @@
-const content = document.getElementById("content");
+import { loadPage } from './modules/pageLoader.js';
+import { initSidebar } from './modules/sidebar.js';
+import * as toast from './modules/toast.js';
 
-let currentPage = null
-async function loadPage(page)
-{
-    if (page == currentPage) { return } else { currentPage = page };
+window.toast = toast;
 
-    const pagePath = `pages/${page}.html`
-    const scriptPath = `scripts/${page}.js`
-
-    try
-    {
-        const res = await fetch(pagePath)
-        const html = await res.text();
-        content.innerHTML = html;
-
-        updateActiveNav(page);
-
-        try { await import(`./${scriptPath}?cacheBust=${Date.now()}`); }
-        catch (err) { console.log(`No JS for page ${page}:`, err.message); }
-    }
-    catch (err) { content.innerHTML = `<p>Error loading page.  ${err}</p>`; }
-}
-
-function updateActiveNav(page) {
-    document.querySelectorAll("nav button").forEach(btn => {
-        btn.classList.toggle("active", btn.getAttribute("data-page") === page);
-    });
-}
-
+initSidebar(loadPage);
 loadPage("home");
+try { lucideAPI.loadIcons(); } catch (e) {}
 
-document.querySelectorAll("nav button").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const page = btn.getAttribute("data-page");
-        loadPage(page);
-    });
-});
+
+// toast.make('Hello World', null, { timeout: 5000, type: 'success'})
+
+// app version
+const versionLabel = document.getElementById("version");
+const version = await api.appVersion();
+versionLabel.innerText = 'v.' + version;
+

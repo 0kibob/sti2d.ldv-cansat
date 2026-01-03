@@ -1,13 +1,10 @@
 const { contextBridge, ipcRenderer } = require('electron')
+const { createIcons, icons } = require("lucide");
+
+contextBridge.exposeInMainWorld("lucideAPI", {
+    loadIcons: () => createIcons({ icons }),
+});
 
 contextBridge.exposeInMainWorld('api', {
-    ping: () => ipcRenderer.invoke('ping')
-    // we can also expose variables, not just functions
-})
-
-contextBridge.exposeInMainWorld('versions', {
-    node: () => process.versions.node,
-    chrome: () => process.versions.chrome,
-    electron: () => process.versions.electron,
-    // we can also expose variables, not just functions
+    appVersion: () => ipcRenderer.invoke('appVersion'),
 })

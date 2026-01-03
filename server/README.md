@@ -46,10 +46,10 @@ docker build --tag samplecan-data-server .
 Run container:
 ##### Window:
 ```bash
-docker run -d -p 8000:8000 -v "${PWD}\data:/app/data" samplecan-data-server
+docker run --name samplecan-data-server -d -p 8000:8000 -v "${PWD}\data:/app/data" samplecan-data-server
 ```
 
 ##### Linux:
 ```bash
-docker run -d -p 8000:8000 -v "$(pwd)/data:/app/data" samplecan-data-server
+docker run --name samplecan-data-server -d -p 8000:8000 -v "$(pwd)/data:/app/data" samplecan-data-server
 ```
