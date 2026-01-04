@@ -1,7 +1,7 @@
 const content = document.getElementById("content");
 let currentPage = null;
 
-export async function loadPage(page) {
+export async function initSPA(page) {
     if (page == currentPage) { return } else { currentPage = page };
 
     const pagePath = `pages/${page}.html`;
@@ -15,12 +15,12 @@ export async function loadPage(page) {
         // notify nav about the page change
         document.dispatchEvent(new CustomEvent('pagechange', { detail: page }));
 
-        try { lucideAPI.loadIcons(); } catch (e) { }
+        // try { lucideAPI.loadIcons(); } catch (e) { }
 
         try { await import(`../${scriptPath}?cacheBust=${Date.now()}`); }
-        catch (err) { console.log(`No JS for page ${page}:`, err.message); }
+        catch (err) {}
     }
     catch (err) { content.innerHTML = `<p>Error loading page.  ${err}</p>`; }
 }
 
-export default { loadPage };
+export default { initSPA };

@@ -1,10 +1,9 @@
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer, shell } = require('electron')
 const { createIcons, icons } = require("lucide");
 
-contextBridge.exposeInMainWorld("lucideAPI", {
-    loadIcons: () => createIcons({ icons }),
-});
-
 contextBridge.exposeInMainWorld('api', {
-    appVersion: () => ipcRenderer.invoke('appVersion'),
-})
+    version: () => ipcRenderer.invoke('appVersion'),
+    openExternal: (url) => shell.openExternal(url),
+    lucide: {render: () => createIcons({ icons })},
+    serverKey: "secretkey1234"
+});

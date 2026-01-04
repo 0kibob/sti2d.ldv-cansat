@@ -1,7 +1,11 @@
 const refreshButton = document.getElementById("refresh-button");
+const addButton = document.getElementById("add-button");
+const importButton = document.getElementById("import-button");
 const missionContainer = document.getElementById("missions-list");
 
-refreshButton?.addEventListener('click', () => {loadMissions();});
+refreshButton?.addEventListener('click', () => { loadMissions(); });
+addButton?.addEventListener('click', () => { window.loadPage("add-mission") });
+importButton?.addEventListener('click', () => { window.loadPage("add-mission") });
 
 async function loadMissions()
 {
@@ -17,8 +21,6 @@ async function loadMissions()
     {
         throwErrorText()
     }
-
-    try { lucideAPI.loadIcons(); } catch (e) {}
 }
 
 function throwLoaderText()
@@ -86,10 +88,45 @@ function appendMissions(missions)
         btn.className = "icon border hover-accent";
         btn.setAttribute("aria-label", "More options");
         btn.innerHTML = '<i data-lucide="ellipsis"></i>';
+
+        window.dropdown.attach(btn, {
+            items: [
+                {
+                    content: 'Edit',
+                    icon: "pencil",
+                    onClick: () => loadPage('view-mission')
+                },
+                {
+                    content: 'Delete',
+                    icon: "trash-2",
+                    // onClick: () => window.toast.error("Delete clicked")
+                    onClick: () => callRemoveMission(mission.id)
+                }
+            ]
+        });
         
         div.append(name, tag, flex, location, btn);
         missionContainer.appendChild(div);
     });
+}
+
+async function callRemoveMission(mission_id)
+{
+    try
+    {
+        const response = await fetch(`http://localhost:8000/rm_mission?m_id=${mission_id}&key=${window.api.serverKey}`);
+        const result = await response.json();
+        console.log(typeof result.success, result.success)
+        if (result.success) { window.toast.success(`Mission #${mission_id} removed successfully.`); }
+        else { window.toast.error(`Failed to remove Mission #${mission_id}.`); }
+    }
+    catch (err)
+    {
+        console.error(err);
+        window.toast.error(`Error removing Mission #${mission_id}.`);
+    }
+
+    loadMissions()
 }
 
 loadMissions()

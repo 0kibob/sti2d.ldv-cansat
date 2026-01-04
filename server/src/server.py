@@ -5,6 +5,7 @@ import os
 from databased import DataBase
 
 DB_PATH = "data/missions.db"
+PASS_KEY = "secretkey1234"
 os.makedirs("data", exist_ok=True)
 
 app: FastAPI = FastAPI()
@@ -34,8 +35,9 @@ async def mission(m_id: int | None = None):
 
 # Remove a mission based on is id
 @app.get("/rm_mission")
-async def rm_mission(m_id: int):
-    return {"message": f"Mission {m_id} removed!"}
+async def rm_mission(m_id: int, key: str):
+    if not key == PASS_KEY: return {"success": False}
+    return db.delete_mission(m_id)
 
 # Create a mission based
 @app.get("/mk_mission")

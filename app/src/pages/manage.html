@@ -7,30 +7,11 @@
             <input type="search" placeholder="Search missions…" class="input h-full"/>
         </div>
         <button id="refresh-button" class="icon border w-fit hover-accent"><i data-lucide="refresh-cw" class="lg"></i>Refresh</button>
-        <button class="icon border w-fit hover-accent"><i data-lucide="arrow-down-z-a" class="lg"></i>Filter</button>
+        <!-- <button class="icon border w-fit hover-accent"><i data-lucide="arrow-down-z-a" class="lg"></i>Filter</button> -->
         <div class="flex-1"></div>
-        <button class="icon fill w-fit"><i data-lucide="plus" class="lg"></i>New Mission</button>
-        <button class="icon border w-fit hover-accent"><i data-lucide="import" class="lg"></i>Import</button>
+        <button id="add-button" class="icon fill w-fit"><i data-lucide="plus" class="lg"></i>New Mission</button>
+        <button id="import-button" class="icon border w-fit hover-accent"><i data-lucide="import" class="lg"></i>Import</button>
     </div>
-
-    <div id="missions-list" class="bg-panel border-1 r-md p-sm flex flex-col flex-1 gap-xs overflow-auto">
-        <!-- <div class="border-1 r-sm p-sm flex flex-row gap-xs items-center">
-            <p class="text-primary">Test Mission 1</p>
-            <div class="tag">id: 1</div>
-            <div class="flex-1"></div>
-            <p class="text-muted-foreground">New York - Dec 19, 2025 · 14:30</p>
-            <button class="icon border hover-accent" aria-label="More options"><i data-lucide="ellipsis"></i></button>
-        </div> -->
-
-        <!-- <p class="text-primary flex text-center justify-center items-center flex-1">No missions yet. <br>Click "New Mission" to create one.</p> -->
-
-        <!-- <p class="text-error flex flex-row gap-sm text-center justify-center items-center flex-1">
-            <i data-lucide="alert-triangle" class="lg"></i>
-            Failed to load missions.<br>Please try again later.
-        </p> -->
-
-        <!-- <span class="loader"></span> -->
-
-    </div>
+    <div id="missions-list" class="bg-panel border-1 r-md p-sm flex flex-col flex-1 gap-xs overflow-y-auto overflow-x-h"></div>
 
 </div>

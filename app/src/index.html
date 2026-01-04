@@ -27,6 +27,10 @@
                 </button>
             </nav>
             <p id="version" class="nav-hide text-muted-foreground size-sm"></p>
+            <button id="sidebar-github" class="hover-muted icon r-sm">
+                <i data-lucide="github" class="lg"></i>
+                <span class="nav-hide">Github</span>
+            </button>
             <button id="sidebar-chevron" class="hover-muted icon r-sm w-fit">
                 <i data-lucide="chevron-right" class="lg"></i>
             </button>
@@ -35,8 +39,8 @@
 
     <main id="content" class="flex flex-col py-sm p-right-sm flex-1"></main>
 
-    <div id="toast-container" class="fixed pointer-event-skip bottom-sm right-sm flex flex-col gap-xs min-w-md z-16"></div>
-
+    <div id="toast-container" class="fixed pointer-event-skip bottom-md right-md flex flex-col gap-xs min-w-md z-16"></div>
+    
 </body>
 <script type="module" src="./renderer.js"></script>
 </html>

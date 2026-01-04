@@ -5,12 +5,6 @@ export function initSidebar(loadPage) {
     const sidebarNavButton = sidebarNav.querySelectorAll("button");
     const sidebarChevron = document.getElementById("sidebar-chevron");
 
-    function setSidebarOpen(open) {
-        if (open) document.body.classList.remove('sidebar-closed');
-        else document.body.classList.add('sidebar-closed');
-        try { localStorage.setItem('sidebarOpen', open ? '1' : '0'); } catch (e) {}
-    }
-
     sidebarNavButton.forEach(btn => {
         btn.addEventListener("click", () => {
             const page = btn.getAttribute("data-page");

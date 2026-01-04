@@ -62,6 +62,18 @@ class DataBase:
         return json.loads(row[0])
 
 
+    def delete_mission(self, m_id: int) -> bool:
+        con = self.get_con()
+        cur = con.cursor()
+
+        cur.execute("DELETE FROM missions WHERE id = ?", (m_id,))
+        deleted = cur.rowcount > 0
+
+        con.commit()
+        con.close()
+
+        return {"success": deleted}
+
 
     # def create_mission(self, data):
     #     con = sqlite3.connect(self.path)

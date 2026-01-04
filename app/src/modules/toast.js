@@ -10,7 +10,7 @@ function iconForType(type)
     }
 }
 
-export function make(title, description, { timeout = 3000, type = 'info' } = {}) {
+export function make(title, description = null, timeout = 3000, type = 'info') {
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.classList.add(`${type}`);
@@ -48,14 +48,18 @@ export function make(title, description, { timeout = 3000, type = 'info' } = {})
     }
 
     container.appendChild(toast);
-    try { lucideAPI.loadIcons(); } catch (e) {}
 
     const timer = setTimeout(() => dismiss(), timeout);
     return { dismiss: () => { clearTimeout(timer); dismiss(); } };
 }
 
-// export const success = (msg, opts = {}) => make(msg, { ...opts, type: 'success' });
-// export const error = (msg, opts = {}) => make(msg, { ...opts, type: 'error' });
-// export const info = (msg, opts = {}) => make(msg, { ...opts, type: 'info' });
+export const success = (title, description = null, timeout) =>
+    make(title, description, timeout, 'success');
 
-export default { make };
+export const error = (title, description = null, timeout) =>
+    make(title, description, timeout, 'error');
+
+export const info = (title, description = null, timeout) =>
+    make(title, description, timeout, 'info');
+
+export default { make, success, error, info };

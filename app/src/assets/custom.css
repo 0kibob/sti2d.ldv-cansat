@@ -6,3 +6,24 @@
 
 /* Hide nav text when sidebar is collapsed */
 #sidebar:not(.open) .nav-hide { display: none; }
+
+.dropdown-menu
+{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    padding: calc(var(--spacing) * 0.25);
+    min-width: calc(var(--container-size) * .5);
+    background: var(--muted);
+    color: var(--accent-foreground);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * .75);
+    box-shadow: 0 10px 20px rgba(0,0,0,.15);
+    z-index: 10;
+}
+
+.dropdown-item:hover
+{
+    background: var(--accent);
+}

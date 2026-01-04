@@ -561,6 +561,11 @@ html, body
 .overflow-h { overflow: hidden; }
 .overflow-auto { overflow: auto; -webkit-overflow-scrolling: touch; }
 
+.overflow-x-h { overflow-x: hidden; }
+.overflow-x-auto { overflow-x: auto; }
+.overflow-y-h { overflow-y: hidden; }
+.overflow-y-auto { overflow-y: auto; }
+
 button, .button
 {
     all: unset;
@@ -678,8 +683,8 @@ input[type="search"]::-webkit-search-cancel-button
 {
     pointer-events: auto;
 
-    background-color: var(--sidebar);
-    color: var(--sidebar-foreground);
+    background-color: var(--background);
+    color: var(--foreground);
     outline: 1px solid var(--border);
     outline-offset: -1px;
     padding-inline: calc(var(--spacing) * 0.75);

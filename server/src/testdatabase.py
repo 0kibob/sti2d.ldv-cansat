@@ -3,7 +3,7 @@ import json
 import random
 from datetime import datetime, timedelta
 
-DB_PATH = "missions.db"
+DB_PATH = "data/missions.db"
 
 
 def random_mission(index: int) -> dict:
@@ -78,7 +78,7 @@ def main():
         "mission TEXT NOT NULL)"
     )
 
-    for i in range(5):
+    for i in range(20):
         mission = random_mission(i)
         cur.execute(
             "INSERT INTO missions (mission) VALUES (?)",
