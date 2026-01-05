@@ -4,8 +4,8 @@ const importButton = document.getElementById("import-button");
 const missionContainer = document.getElementById("missions-list");
 
 refreshButton?.addEventListener('click', () => { loadMissions(); });
-addButton?.addEventListener('click', () => { window.loadPage("add-mission") });
-importButton?.addEventListener('click', () => { window.loadPage("add-mission") });
+addButton?.addEventListener('click', () => { window.page.change("add-mission") });
+importButton?.addEventListener('click', () => { window.page.change("add-mission") });
 
 async function loadMissions()
 {
@@ -94,7 +94,7 @@ function appendMissions(missions)
                 {
                     content: 'Edit',
                     icon: "pencil",
-                    onClick: () => loadPage('view-mission')
+                    onClick: () => window.page.change('view-mission')
                 },
                 {
                     content: 'Delete',

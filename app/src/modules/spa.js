@@ -1,7 +1,7 @@
 const content = document.getElementById("content");
 let currentPage = null;
 
-export async function initSPA(page) {
+export async function change(page) {
     if (page == currentPage) { return } else { currentPage = page };
 
     const pagePath = `pages/${page}.html`;
@@ -23,4 +23,4 @@ export async function initSPA(page) {
     catch (err) { content.innerHTML = `<p>Error loading page.  ${err}</p>`; }
 }
 
-export default { initSPA };
+export default { change };

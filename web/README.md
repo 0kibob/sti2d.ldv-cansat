@@ -48,5 +48,5 @@ docker build --tag samplecan-web-server .
 
 Run container:
 ```bash
-docker run -d -p 5000:5000 samplecan-web-server
+docker run --name samplecan-web-server -d -p 5000:5000 samplecan-web-server
 ```

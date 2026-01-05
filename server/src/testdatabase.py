@@ -75,7 +75,8 @@ def main():
     cur.execute(
         "CREATE TABLE IF NOT EXISTS missions ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-        "mission TEXT NOT NULL)"
+        "mission TEXT NOT NULL, "
+        "deleted INTEGER DEFAULT 0)"
     )
 
     for i in range(20):
