@@ -34,7 +34,7 @@ async def home():
 async def get_missions(): return db.get_missions()
 
 # Get all trashed mission for display
-@app.get("api/missions/trash")
+@app.get("/api/missions/trash")
 async def trash_missions(): return db.get_trash_missions()
 
 # Get a mission based on is id

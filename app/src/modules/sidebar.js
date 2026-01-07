@@ -13,7 +13,7 @@ export function initSidebar(loadPage) {
     });
 
     document.addEventListener('pagechange', (e) => {
-        const page = e.detail;
+        const { page, params } = e.detail;
         sidebarNavButton.forEach(btn => {
             btn.classList.toggle("active", btn.getAttribute("data-page") === page);
         });

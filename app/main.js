@@ -1,5 +1,6 @@
-const { app, BrowserWindow, Menu, ipcMain } = require('electron/main')
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron/main')
 const path = require('node:path')
+const fsPromises = require('fs').promises
 
 const windowSettings =
 {
@@ -36,6 +37,17 @@ function createWindow()
 function registerIpcHandlers()
 {
     ipcMain.handle('appVersion', async () => { return app.getVersion(); });
+
+    ipcMain.handle('openJsonFile', async () => {
+        const { canceled, filePaths } = await dialog.showOpenDialog({
+            properties: ['openFile'],
+            filters: [{ name: 'JSON', extensions: ['json'] }]
+        });
+        if (canceled) return null;
+        const content = await fsPromises.readFile(filePaths[0], 'utf8');
+        try { return JSON.parse(content); }
+        catch (err) { return null; }
+    });
 }
 
 app.whenReady().then(() =>

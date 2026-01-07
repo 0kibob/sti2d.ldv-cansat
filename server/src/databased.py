@@ -85,9 +85,9 @@ class DataBase:
 
         if row is None: return {}
 
-        return json.loads(row[0])
-    
+        return {"success": True, "data": json.loads(row[0])}
 
+    
     def mark_mission(self, m_id: int) -> bool:
         con = self.get_con()
         cur = con.cursor()

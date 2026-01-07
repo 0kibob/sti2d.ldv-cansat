@@ -27,3 +27,46 @@
 {
     background: var(--accent);
 }
+
+button.tab, .button.tab
+{
+    border-radius: var(--radius) var(--radius) 0 0;
+    box-sizing: border-box;
+    position: relative;
+}
+
+button.tab.active, .button.tab.active
+{
+    position: relative;
+    background-color: var(--panel);
+    border: 1px solid var(--border);
+    border-bottom: 1px solid transparent;
+}
+
+button.tab.active::before, .button.tab.active::before
+{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: calc(var(--radius) * 2);
+    background-color: var(--panel);
+    outline: 1px solid var(--border);
+    margin-bottom: -10px;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Helpers */
+.break-words {
+    word-break: break-word;
+    /* white-space: pre-wrap; */
+    /* overflow-wrap: anywhere; */
+    /* max-width: 100%; */
+}
+
+.max-w-full
+{
+    max-width: 100%;
+}
