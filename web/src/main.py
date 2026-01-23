@@ -47,7 +47,7 @@ def error_401(e):
     return error_handler(405, "401 Method Not Allowed", "The method is not allowed for the requested URL.")
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=80)
 
 # Run
-# waitress-serve --host 0.0.0.0 --port 5000 src.main:app
+# waitress-serve --host 0.0.0.0 --port 80 src.main:app
