@@ -37,7 +37,6 @@ function createWindow()
 function registerIpcHandlers()
 {
     ipcMain.handle('appVersion', async () => { return app.getVersion(); });
-
     ipcMain.handle('openJsonFile', async () => {
         const { canceled, filePaths } = await dialog.showOpenDialog({
             properties: ['openFile'],

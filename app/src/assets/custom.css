@@ -1,11 +1,39 @@
-#sidebar.open #sidebar-chevron svg
-{
-    transform: rotate(180deg);
-    /* transition: transform 0.3s; */
-}
+#sidebar #sidebar-chevron svg { transition: transform 0.3s ease; justify-self: end; }
+#sidebar.open #sidebar-chevron svg { transform: rotate(180deg);  }
 
 /* Hide nav text when sidebar is collapsed */
 #sidebar:not(.open) .nav-hide { display: none; }
+
+
+#sidebar {
+    transition: width 1s ease, max-width 1s ease;
+}
+
+#sidebar:not(.open)
+{
+    min-width: fit-content;
+}
+
+/* Ensure sidebar container transitions smoothly for other properties */
+/* #sidebar { transition: width 250ms ease, max-width 250ms ease } */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .dropdown-menu
 {

@@ -20,8 +20,8 @@ export function initSidebar(loadPage) {
     });
 
     sidebarChevron?.addEventListener('click', () => {
-        sidebar.classList.toggle("min-w-md");
         sidebar.classList.toggle("open");
+        sidebar.classList.toggle("w-md");
     });
 }
 

@@ -11,11 +11,11 @@
     <link rel="stylesheet" href="assets/custom.css">
 </head>
 
-<body class="bg-background flex flex-row overflow-h">
+<body class="flex flex-row overflow-h bg-background">
 
     <!-- Sidebar -->
-    <div class="p-sm flex flex-col gap-xs">
-        <div id="sidebar" class="bg-panel border-1 p-xs r-md flex flex-col gap-xs flex-1">
+    <div id="sidebar" class="flex flex-col  py-sm p-left-sm">
+        <div class="flex flex-col flex-1 p-xs gap-xs bg-panel border-1 r-md">
             <nav id="sidebar-nav" class="flex flex-col gap-xs h-full overflow-auto scrollbar-transparent">
                 <button data-page="home" class="sidebar icon hover-accent r-sm">
                     <i data-lucide="layout-grid" class="lg"></i>
@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <main id="content" class="flex flex-col flex-1 py-sm p-right-sm"></main>
+    <main id="content" class="flex flex-col flex-1 max-w-full p-sm"></main>
 
     <div id="toast-container" class="fixed pointer-event-skip bottom-md right-md flex flex-col gap-xs min-w-md z-16"></div>
     
