@@ -6,38 +6,52 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' http://localhost:8000;"/>
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'"/>
     <title>SampleCan - Dashboard</title>
-    <link rel="stylesheet" href="assets/black.webstyle_framework.css">
     <link rel="stylesheet" href="assets/lucide_icon.css">
+    <link rel="stylesheet" href="assets/black.webstyle_framework.css">
     <link rel="stylesheet" href="assets/custom.css">
 </head>
 
 <body class="flex flex-row overflow-h bg-background">
-
-    <!-- Sidebar -->
-    <div id="sidebar" class="flex flex-col  py-sm p-left-sm">
-        <div class="flex flex-col flex-1 p-xs gap-xs bg-panel border-1 r-md">
-            <nav id="sidebar-nav" class="flex flex-col gap-xs h-full overflow-auto scrollbar-transparent">
-                <button data-page="home" class="sidebar icon hover-accent r-sm">
-                    <i data-lucide="layout-grid" class="lg"></i>
-                    <span class="nav-hide">Home</span>
-                </button>
-                <button data-page="manage" class="sidebar icon hover-accent r-sm">
-                    <i data-lucide="database" class="lg"></i>
-                    <span class="nav-hide">Manage</span>
-                </button>
-            </nav>
-            <p id="version" class="nav-hide text-muted-foreground size-sm"></p>
-            <button id="sidebar-github" class="hover-muted icon r-sm">
-                <i data-lucide="github" class="lg"></i>
-                <span class="nav-hide">Github</span>
-            </button>
-            <button id="sidebar-chevron" class="hover-muted icon r-sm w-fit">
-                <i data-lucide="chevron-right" class="lg"></i>
-            </button>
-        </div>
+    <div id="sidebar" class="flex flex-col py-xs p-left-xs">
+    <aside data-sidebar data-sidebar-state="collapsed" class="outline-1 r-md">
+        <nav data-sidebar-nav>
+            <ul data-sidebar-list>
+                <!-- <li>
+                    <div data-sidebar-item>
+                        <i data-sidebar-icon data-lucide="aperture"></i>
+                    </div>
+                </li> -->
+                <li>
+                    <button data-sidebar-button data-pagelink="home">
+                        <i data-sidebar-icon data-lucide="layout-grid"></i>
+                        <span data-sidebar-label>Home</span>
+                    </button>
+                </li data-sidebar-item>
+                <li>
+                    <button data-sidebar-button data-pagelink="manage">
+                        <i data-sidebar-icon data-lucide="database"></i>
+                        <span data-sidebar-label>Manage</span>
+                    </button>
+                </li>
+                <li data-sidebar-spacer></li>
+                <li><p id="version" class="text-muted-foreground size-xs"></p></li>
+                <li>
+                    <button data-sidebar-item id="github-redirect" class="hover-accent">
+                        <i data-sidebar-icon data-lucide="github"></i>
+                        <span data-sidebar-label>Github</span>
+                    </button>
+                </li>
+                <li>
+                    <button data-sidebar-toggle>
+                        <i data-sidebar-icon data-lucide="chevron-right"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </aside>
     </div>
 
-    <main id="content" class="flex flex-col flex-1 max-w-full p-sm"></main>
+    <main id="content" class="flex flex-col flex-1 max-w-full p-xs"></main>
 
     <div id="toast-container" class="fixed pointer-event-skip bottom-md right-md flex flex-col gap-xs min-w-md z-16"></div>
     

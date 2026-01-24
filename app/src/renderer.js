@@ -20,6 +20,6 @@ const versionLabel = document.getElementById("version");
 const version = await api.version();
 versionLabel.innerText = 'v.' + version;
 
-document.getElementById("sidebar-github")?.addEventListener("click", () => {
+document.getElementById("github-redirect")?.addEventListener("click", () => {
     window.api.openExternal("https://github.com/0kibob/sti2d.ldv-cansat");
 });

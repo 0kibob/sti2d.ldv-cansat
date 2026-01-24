@@ -1,28 +1,30 @@
-export function initSidebar(loadPage) {
+export function initSidebar(loadPage)
+{
+    const sidebar = document.querySelector("[data-sidebar]")
+    const buttons = document.querySelectorAll("[data-pagelink]")
+    const toggles = document.querySelectorAll("[data-sidebar-toggle]")
 
-    const sidebar = document.getElementById('sidebar');
-    const sidebarNav = document.getElementById("sidebar-nav");
-    const sidebarNavButton = sidebarNav.querySelectorAll("button");
-    const sidebarChevron = document.getElementById("sidebar-chevron");
-
-    sidebarNavButton.forEach(btn => {
+    buttons.forEach(btn => {
         btn.addEventListener("click", () => {
-            const page = btn.getAttribute("data-page");
+            const page = btn.getAttribute("data-pagelink");
             loadPage(page);
         });
     });
 
     document.addEventListener('pagechange', (e) => {
         const { page, params } = e.detail;
-        sidebarNavButton.forEach(btn => {
-            btn.classList.toggle("active", btn.getAttribute("data-page") === page);
+        buttons.forEach(btn => {
+            btn.classList.toggle("active", btn.getAttribute("data-pagelink") === page);
         });
     });
 
-    sidebarChevron?.addEventListener('click', () => {
-        sidebar.classList.toggle("open");
-        sidebar.classList.toggle("w-md");
+    toggles.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const collapsed = sidebar.getAttribute("data-sidebar-state") === "collapsed";
+            sidebar.setAttribute("data-sidebar-state", collapsed ? "expanded" : "collapsed");
+        });
     });
+
 }
 
 export default { initSidebar };

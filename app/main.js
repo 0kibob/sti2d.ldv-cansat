@@ -21,15 +21,17 @@ function createWindow()
 
     Menu.setApplicationMenu(null)
 
-    browserWindow.webContents.on('before-input-event', (event, input) =>
+    if (!app.isPackaged)
     {
-        if (input.key === 'F12')
+        browserWindow.webContents.on('before-input-event', (event, input) =>
         {
-            browserWindow.webContents.toggleDevTools()
-            event.preventDefault()
-        }
-    })
-    // browserWindow.webContents.toggleDevTools()
+            if (input.key === 'F12')
+            {
+                browserWindow.webContents.toggleDevTools()
+                event.preventDefault()
+            }
+        })
+    }
     
     return browserWindow;
 }

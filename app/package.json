@@ -1,18 +1,30 @@
 {
-    "name": "samplecan",
-    "version": "1.0.0",
-    "description": "",
-    "license": "MIT",
-    "author": "Timéo LAURET",
-    "type": "commonjs",
-    "main": "main.js",
-    "scripts": {
-        "start": "electron ."
-    },
-    "devDependencies": {
-        "electron": "^39.2.7"
-    },
-    "dependencies": {
-        "lucide": "^0.562.0"
-    }
+  "name": "samplecan",
+  "version": "1.0.0",
+  "description": "SampleCan Dashboard",
+  "license": "MIT",
+  "author": "Timéo LAURET",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    ".": "electron .",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^7.11.1",
+    "@electron-forge/maker-deb": "^7.11.1",
+    "@electron-forge/maker-rpm": "^7.11.1",
+    "@electron-forge/maker-squirrel": "^7.11.1",
+    "@electron-forge/maker-zip": "^7.11.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.11.1",
+    "@electron-forge/plugin-fuses": "^7.11.1",
+    "@electron/fuses": "^1.8.0",
+    "electron": "^39.2.7"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.1",
+    "lucide": "^0.562.0"
+  }
 }
