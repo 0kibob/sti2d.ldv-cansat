@@ -4,7 +4,7 @@ const importButton = document.getElementById("import-button");
 addButton?.addEventListener('click', () => { console.log(pageParams.test); });
 importButton?.addEventListener('click', async () => {
     try {
-        const result = await window.api.openJsonFile();
+        const result = await window.file.json.open();
         if (!result) return; // user canceled
         window.page.change('add-mission', {"import": true, "data": JSON.stringify(result)});
     } 

@@ -1,13 +1,13 @@
 
 export function initLucideMutationObserver()
 {
-    window.api.lucide.render();
+    window.icons.lucide.render();
 
     const observer = new MutationObserver((mutations) => {
         const hasIcon = mutations.some(m => 
             Array.from(m.addedNodes).some(node => node.querySelector?.("i[data-lucide]"))
             );
-        if (hasIcon) window.api.lucide.render();
+        if (hasIcon) window.icons.lucide.render();
     });
 
     observer.observe(document.body, {

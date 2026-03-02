@@ -1,74 +1,47 @@
-const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron/main')
+const { app, BrowserWindow, globalShortcut } = require('electron/main')
+const { registerHandlers } = require('./src/ipc/handler');
 const path = require('node:path')
-const fsPromises = require('fs').promises
 
-const windowSettings =
-{
-    width: 1280,
-    height: 720,
-    webPreferences:
-    {
-        preload: path.join(__dirname, "src", "preload.js"),
-        contextIsolation: true,
-        nodeIntegration: true
-    }
-};
+app.win = null
 
-function createWindow()
-{
-    const browserWindow = new BrowserWindow(windowSettings);
-    browserWindow.loadFile(path.join(__dirname, "src", "index.html"));
-
-    Menu.setApplicationMenu(null)
-
-    if (!app.isPackaged)
-    {
-        browserWindow.webContents.on('before-input-event', (event, input) =>
-        {
-            if (input.key === 'F12')
-            {
-                browserWindow.webContents.toggleDevTools()
-                event.preventDefault()
-            }
-        })
-    }
-    
-    return browserWindow;
-}
-
-function registerIpcHandlers()
-{
-    ipcMain.handle('appVersion', async () => { return app.getVersion(); });
-    ipcMain.handle('openJsonFile', async () => {
-        const { canceled, filePaths } = await dialog.showOpenDialog({
-            properties: ['openFile'],
-            filters: [{ name: 'JSON', extensions: ['json'] }]
-        });
-        if (canceled) return null;
-        const content = await fsPromises.readFile(filePaths[0], 'utf8');
-        try { return JSON.parse(content); }
-        catch (err) { return null; }
-    });
-}
-
-app.whenReady().then(() =>
-{
-    registerIpcHandlers();
-    createWindow();
-
-    app.on('activate', () => 
-    {
-        if (BrowserWindow.getAllWindows().length === 0)
-        {
-            createWindow();
+app.on('ready', () => {
+    app.win = new BrowserWindow({
+        width: 1280,
+        height: 720,
+        minWidth: 630,
+        minHeight: 360,
+        autoHideMenuBar: true,
+        backgroundColor: '#212125',
+        resizable: true,
+        webPreferences: {
+            zoomFactor: 1.0,
+            contextIsolation: true,
+            nodeIntegration: false,
+            sandbox: false,
+            backgroundThrottling: false,
+            preload: path.join(__dirname, 'src/bridge.js')
         }
+    })
+
+    registerHandlers(app)
+    app.debug()
+    app.win.loadURL(path.join(__dirname, 'src/index.html'))
+
+    app.win.on('closed', () => {
+        app.quit()
+    })
+
+    app.on('window-all-closed', () => {
+        app.quit()
+    })
+
+    app.on('activate', () => {
+        if (app.win === null) { createWindow() }
+        else { app.win.show() }
     })
 })
 
-app.on('window-all-closed', () =>
-{
-    if (process.platform !== 'darwin')
-    {
-        app.quit();
-    }
-})
+app.debug = function () {
+    app.win.toggleDevTools()
+    globalShortcut.register('F1', () => { app.win.toggleDevTools() })
+}
