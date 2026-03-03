@@ -5,8 +5,6 @@ const invoke = (channel) => (...args) => ipcRenderer.invoke(channel, ...args);
 
 contextBridge.exposeInMainWorld('api', {
     version: invoke('api:version'),
-    
-    openExternal: (url) => shell.openExternal(url), // need to be change
     serverKey: "secretkey1234" // need to be change
 });
 
@@ -17,6 +15,10 @@ contextBridge.exposeInMainWorld('file', {
         open: invoke('file:json:open'),
         save: (path, data) => invoke('file:json:save')(path, data),
     }
+});
+
+contextBridge.exposeInMainWorld('web', {
+    open: (url) => shell.openExternal(url),
 });
 
 contextBridge.exposeInMainWorld('icons', {

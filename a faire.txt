@@ -1,0 +1,301 @@
+web: pas obliger
+
+dashboard:
+    importer une mission par la carte sd
+    enregistrer une mission depuis le serial (antenne)
+    mettre des graphiques
+
+cansat:
+    connecter les modules
+    faire le pcb
+    
+    enregistrer sur la carte sd
+    transmis depuis l'antenne (serial)
+
+plage de musure:
+genre fixer une limite ptet -40 120
+
+
+
+CanSat Telemetry System – Final Design
+1. Mission Requirements
+
+The CanSat must:
+
+Measure data every 1 second
+
+Store all data on an SD card
+
+Transmit telemetry during descent (maximum 2 minutes)
+
+Respect European ISM regulations
+
+Stop transmission after landing
+
+2. Selected Frequency Band
+
+We use the 869.4–869.65 MHz ISM band.
+
+This band allows:
+
+Maximum power: 500 mW (27 dBm)
+
+Duty cycle: 10%
+
+Our LoRa module supports up to 22 dBm (≈158 mW), which is below the legal 27 dBm limit.
+Therefore, the system is compliant.
+
+3. Power Conversion (mW ↔ dBm)
+
+The relationship between milliwatts and dBm is:
+
+P(dBm) = 10 × log10(P(mW))
+
+P(mW) = 10^(P(dBm)/10)
+
+Examples:
+
+1 mW = 0 dBm
+10 mW = 10 dBm
+25 mW = 14 dBm
+100 mW = 20 dBm
+500 mW = 27 dBm
+22 dBm ≈ 158 mW
+
+4. Sensor Data Size
+
+Measured parameters:
+
+Temperature → 2 bytes
+Pressure → 2 bytes
+Acceleration (X, Y, Z) → 6 bytes
+Gyroscope (X, Y, Z) → 6 bytes
+
+Total per sample:
+
+16 bytes per second
+
+5. Improved Transmission Strategy (Smaller Batches)
+
+Instead of sending 30 seconds in one large packet, we divide data into smaller batches for better reliability.
+
+Sampling rate: 1 Hz
+Batch size: 5 seconds
+
+Data per batch:
+
+16 bytes × 5 = 80 bytes
+
+So every 5 seconds, we transmit one 80-byte packet.
+
+During 2 minutes of descent:
+
+120 seconds / 5 seconds = 24 packets
+
+Total transmitted data:
+
+24 × 80 = 1920 bytes
+
+This method is better because:
+
+Smaller packets reduce packet loss impact
+
+LoRa handles <100 bytes very efficiently
+
+Lower airtime per transmission
+
+More robust during descent
+
+6. Duty Cycle Verification
+
+The 869.4–869.65 MHz band allows 10% duty cycle.
+
+Maximum transmission time per hour:
+
+10% × 3600 seconds = 360 seconds (6 minutes)
+
+Now calculate our transmission time.
+
+Using SF8 and 125 kHz bandwidth, bitrate ≈ 3125 bps.
+
+Bytes per second ≈ 390 bytes/s.
+
+Time to transmit 80 bytes:
+
+80 / 390 ≈ 0.2 seconds.
+
+Each packet takes about 0.2 seconds of airtime.
+
+For 24 packets:
+
+24 × 0.2 = 4.8 seconds total transmission time.
+
+Allowed per hour: 360 seconds.
+Used: ~5 seconds.
+
+System is fully compliant.
+
+7. Recommended LoRa Configuration
+
+Frequency: 869.45 MHz
+Transmit Power: 20–22 dBm
+Bandwidth: 125 kHz
+Spreading Factor: SF8 (or SF9 if extra range needed)
+Coding Rate: 4/5
+Sampling: 1 Hz
+Transmission interval: 5 seconds
+Payload size: 80 bytes
+
+8. Landing Procedure
+
+After landing:
+
+Option 1: Manual button to stop transmission.
+
+Option 2 (recommended):
+Automatic landing detection using acceleration and altitude stability.
+Send final “LANDED” packet.
+Stop transmission automatically.
+
+9. Why Smaller Batches Are Better
+
+Compared to 30-second packets (480 bytes), 5-second packets (80 bytes):
+
+Lower risk if one packet is lost
+
+Faster transmission
+
+More stable radio link
+
+Better real-time monitoring from ground station
+
+This design is optimized for CanSat descent telemetry.
+
+If you want, I can now write a short “Radio Communication Subsystem” paragraph formatted exactly like competition reports usually expect (1-page clean technical summary).
+
+
+Perfect — that is exactly how a professional flight system should behave 👍
+
+You want:
+
+Normal mode → send data in 5-second batches
+
+If landing is detected →
+
+Stop collecting new data
+
+Immediately send remaining unsent data (even if batch not full)
+
+Then stop transmission
+
+Below is a clean text you can copy into your report.
+
+Emergency Transmission and Landing Procedure
+1. Normal Operation Mode
+
+During descent, the CanSat operates in batch transmission mode:
+
+Sensor sampling rate: 1 Hz
+
+Each sample size: 16 bytes
+
+Batch size: 5 samples
+
+Packet size: 80 bytes
+
+Transmission interval: every 5 seconds
+
+Data is continuously stored on the SD card.
+
+2. Landing Detection Logic
+
+Landing is detected when:
+
+A significant acceleration spike is measured (impact detection), AND
+
+Altitude remains constant for a defined time (e.g., 3–5 seconds)
+
+Once both conditions are satisfied, the system switches to Landing Mode.
+
+3. Landing Mode Behavior
+
+When landing is detected:
+
+Stop acquiring new sensor data
+
+Check buffer for unsent samples
+
+Immediately transmit all remaining data in the buffer
+(even if the batch is not complete)
+
+Send a final status packet: “LANDED”
+
+Disable radio transmission
+
+This ensures:
+
+No flight data is lost
+
+All measurements are transmitted
+
+Duty cycle remains respected
+
+No unnecessary transmission after landing
+
+4. Example Scenario
+
+Suppose landing occurs 3 seconds after the last transmission.
+
+Buffer contains:
+
+3 samples × 16 bytes = 48 bytes
+
+Instead of waiting for 5 samples (80 bytes), the system:
+
+Immediately transmits the 48-byte packet
+
+Sends final “LANDED” message
+
+Stops transmission
+
+This guarantees that no measured data remains unsent.
+
+5. Compliance with Duty Cycle
+
+Even in worst case:
+
+24 regular packets (80 bytes each)
+
+1 final partial packet
+
+1 short “LANDED” packet
+
+Total transmission time remains far below the 10% duty cycle limit of the 869.4–869.65 MHz band.
+
+Therefore, the system remains fully compliant.
+
+6. System Behavior Summary
+
+Descent phase:
+
+Sample every 1 second
+
+Transmit every 5 seconds
+
+Landing detected:
+
+Stop sampling
+
+Send remaining buffered data
+
+Send final confirmation packet
+
+Stop radio
+
+This approach ensures maximum data integrity and regulatory compliance.
+
+the idea
+save the data on the sdcard
+send batch of data every few second
+
+detect fall send end transimision signal

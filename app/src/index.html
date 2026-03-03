@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' http://localhost:8000;"/>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' http://localhost:81;"/>
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'"/>
     <title>SampleCan - Dashboard</title>
     <link rel="stylesheet" href="assets/lucide_icon.css">
@@ -35,11 +35,10 @@
                     </button>
                 </li>
                 <li data-sidebar-spacer></li>
-                <li><p id="version" class="text-muted-foreground size-xs"></p></li>
                 <li>
-                    <button data-sidebar-item id="github-redirect" class="hover-accent">
-                        <i data-sidebar-icon data-lucide="github"></i>
-                        <span data-sidebar-label>Github</span>
+                    <button data-sidebar-button data-pagelink="info">
+                        <i data-sidebar-icon data-lucide="info"></i>
+                        <span data-sidebar-label>Info</span>
                     </button>
                 </li>
                 <li>

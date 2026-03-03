@@ -51,7 +51,7 @@ async function loadMissionsForTab(tab)
 {
     throwLoaderText();
 
-    let url = 'http://localhost:8000/api/missions';
+    let url = 'http://localhost:81/api/missions';
     if (tab === 'trash') { url = 'http://localhost:8000/api/missions/trash'; }
 
     try {
@@ -197,7 +197,7 @@ async function callMarkMission(mission_id)
 {
     try
     {
-        let url = `http://localhost:8000/api/missions/mark?id=${mission_id}`;
+        let url = `http://localhost:81/api/missions/mark?id=${mission_id}`;
         const response = await fetch(url, { method: 'GET', headers: { 'x-api-key': window.api.serverKey } });
         const result = await response.json();
         if (result.success) { window.toast.success(`Mission #${mission_id} mark as delete successfully.`); }
@@ -216,7 +216,7 @@ async function callDeleteMission(mission_id)
 {
     try
     {
-        let url = `http://localhost:8000/api/missions/delete?id=${mission_id}`;
+        let url = `http://localhost:81/api/missions/delete?id=${mission_id}`;
         const response = await fetch(url, { method: 'GET', headers: { 'x-api-key': window.api.serverKey } });
         const result = await response.json();
         if (result.success) { window.toast.success(`Mission #${mission_id} remove successfully.`); }
@@ -235,7 +235,7 @@ async function callRestoreMission(mission_id)
 {
     try
     {
-        let url = `http://localhost:8000/api/missions/restore?id=${mission_id}`;
+        let url = `http://localhost:81/api/missions/restore?id=${mission_id}`;
         const response = await fetch(url, { method: 'GET', headers: { 'x-api-key': window.api.serverKey } });
         const result = await response.json();
         if (result.success) { window.toast.success(`Mission #${mission_id} restore successfully.`); }
