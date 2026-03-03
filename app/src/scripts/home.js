@@ -1,7 +1,12 @@
 const addButton = document.getElementById("add-button");
 const importButton = document.getElementById("import-button");
 
-addButton?.addEventListener('click', () => { console.log(pageParams.test); });
+addButton?.addEventListener('click', async () => {
+    console.log(await window.file.scm.open())
+});
+
+
+
 importButton?.addEventListener('click', async () => {
     try {
         const result = await window.file.json.open();

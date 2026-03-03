@@ -14,7 +14,8 @@ contextBridge.exposeInMainWorld('file', {
     json: {
         open: invoke('file:json:open'),
         save: (path, data) => invoke('file:json:save')(path, data),
-    }
+    },
+    scm: { open: invoke('file:scm:open') }
 });
 
 contextBridge.exposeInMainWorld('web', {

@@ -1,6 +1,8 @@
 const { dialog } = require('electron/main');
 const fs = require('fs').promises;
 
+const PACKET_SIZE = 16;
+
 async function openDialog(options = {}) {
     const result = await dialog.showOpenDialog({
         properties: ['openFile'],
@@ -26,6 +28,36 @@ async function readJson(path) {
 
 async function writeJson(path, data) {
     return writeFile(path, JSON.stringify(data, null, 2));
+}
+
+function readScm(buffer) {
+
+    const data = {
+        temperature: [],
+        pressure: [],
+        accelX: [],
+        accelY: [],
+        accelZ: [],
+        gyroX: [],
+        gyroY: [],
+        gyroZ: []
+    };
+
+    for (let offset = 0; offset < buffer.length; offset += PACKET_SIZE) {
+
+        data.temperature.push(buffer.readInt16LE(offset + 0) / 100); // scaled
+        data.pressure.push(buffer.readUInt16LE(offset + 2));
+
+        data.accelX.push(buffer.readInt16LE(offset + 4));
+        data.accelY.push(buffer.readInt16LE(offset + 6));
+        data.accelZ.push(buffer.readInt16LE(offset + 8));
+
+        data.gyroX.push(buffer.readInt16LE(offset + 10));
+        data.gyroY.push(buffer.readInt16LE(offset + 12));
+        data.gyroZ.push(buffer.readInt16LE(offset + 14));
+    }
+
+    return data;
 }
 
 async function open() {
@@ -56,11 +88,21 @@ async function saveJson(_event, path, data) {
     return true;
 }
 
+async function openScm() {
+    const path = await openDialog({
+        filters: [{ name: 'SampleCan Mission', extensions: ['scm'] }]
+    });
+    if (!path) return null;
+    try { return readScm(await fs.readFile(path)); }
+    catch { return null; }
+}
+
 module.exports = {
     handlers: {
         'file:open': open,
         'file:save': save,
         'file:json:open': openJson,
-        'file:json:save': saveJson
+        'file:json:save': saveJson,
+        'file:scm:open': openScm
     }
 };
