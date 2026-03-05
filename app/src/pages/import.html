@@ -1,0 +1,29 @@
+<div id="debug"></div>
+
+<div class="h-full flex flex-col gap-xs">
+
+    <div class="flex flex-col r-md gap-xs overflow-h">
+        <div class="flex flex-row bg-panel border-1 r-md p-xs gap-xs">
+            <div class="search min-w-md flex-shrink border-1 r-sm px-xs flex flex-row gap-xs items-center text-primary">
+                <i data-lucide="pen" class="lg"></i>
+                <input type="search" placeholder="Mission Name" class="input h-full"/>
+            </div>
+            <div class="search min-w-md flex-shrink border-1 r-sm px-xs flex flex-row gap-xs items-center text-primary">
+                <i data-lucide="clock" class="lg"></i>
+                <input type="time" placeholder="Mission Name" class="input h-full"/>
+            </div>
+            <div class="flex-1"></div>
+            <button id="confirm-button" class="icon fill w-fit"><i data-lucide="save" class="lg"></i>Save</button>
+        </div>
+    </div>
+
+    <div class="flex flex-col flex-1 overflow-x-h overflow-y-auto">
+        <div class="grid gap-xs flex-1">
+            <div id="map" class="item bg-panel border-1 r-md"></div>
+            <div id="temp" class="item bg-panel border-1 r-md"></div>
+            <div id="pres" class="item bg-panel border-1 r-md"></div>
+            <div id="accel" class="item bg-panel border-1 r-md"></div>
+            <div id="gyro" class="item bg-panel border-1 r-md"></div>
+        </div>    
+    </div>
+</div>

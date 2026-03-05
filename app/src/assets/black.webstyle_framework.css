@@ -608,6 +608,7 @@ html, body
 .flex-1 { flex: 1; }
 .flex-col { flex-direction: column; }
 .flex-row { flex-direction: row; }
+.flex-shrink { flex-shrink: 1; }
 .justify-center { justify-content: center; }
 .justify-start { justify-content: start; }
 .justify-end { justify-content: end; }
@@ -852,6 +853,8 @@ input
 {
     all: unset;
     color: var(--primary);
+    padding-inline: calc(var(--spacing) * 0.25);
+    padding-block: calc(var(--spacing) * .5);
 }
 
 input::placeholder

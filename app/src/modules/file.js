@@ -116,6 +116,28 @@ async function openScm() {
     catch { return null; }
 }
 
+async function openMission() {
+    const path = await openDialog({
+        filters: [{ name: 'SampleCan Mission', extensions: ['json', 'scm'] }]
+    });
+
+    if (!path) return null;
+
+    const ext = path.split('.').pop().toLowerCase();
+
+    try {
+        if (ext === 'json') {
+            return { type: 'json', data: await readJson(path) };
+        }
+
+        if (ext === 'scm') {
+            return { type: 'scm', data: readScm(await fs.readFile(path)) };
+        }
+        return null;
+    }
+    catch { return null; }
+}
+
 module.exports = {
     handlers: {
         'file:open': open,
@@ -123,6 +145,7 @@ module.exports = {
         'file:json:open': openJson,
         'file:json:save': saveJson,
         'file:json:download': downloadJson,
-        'file:scm:open': openScm
+        'file:scm:open': openScm,
+        'file:mission:open': openMission
     }
 };
