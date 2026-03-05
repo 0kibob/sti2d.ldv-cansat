@@ -13,6 +13,15 @@ async function openDialog(options = {}) {
     return result.filePaths[0];
 }
 
+async function openSaveDialog(options = {}) {
+    const result = await dialog.showSaveDialog({
+        ...options
+    });
+
+    if (result.canceled) return null;
+    return result.filePath;
+}
+
 async function readFile(path, encoding = 'utf8') {
     return fs.readFile(path, encoding);
 }
@@ -88,6 +97,16 @@ async function saveJson(_event, path, data) {
     return true;
 }
 
+async function downloadJson(_event, data, name) {
+    const path = await openSaveDialog({
+        defaultPath: `${name}.json`,
+        filters: [{ name: 'JSON', extensions: ['json'] }]
+    });
+    if (!path) return null;
+    await writeJson(path, data);
+    return true
+}
+
 async function openScm() {
     const path = await openDialog({
         filters: [{ name: 'SampleCan Mission', extensions: ['scm'] }]
@@ -103,6 +122,7 @@ module.exports = {
         'file:save': save,
         'file:json:open': openJson,
         'file:json:save': saveJson,
+        'file:json:download': downloadJson,
         'file:scm:open': openScm
     }
 };

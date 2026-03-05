@@ -3,9 +3,15 @@ const { createIcons, icons } = require("lucide");
 
 const invoke = (channel) => (...args) => ipcRenderer.invoke(channel, ...args);
 
+const serverUrl = "http://localhost";
+const serverPort = "81";
+
 contextBridge.exposeInMainWorld('api', {
-    version: invoke('api:version'),
-    serverKey: "secretkey1234" // need to be change
+    version: () => invoke('api:version'),
+    serverUrl,
+    serverPort,
+    serverKey: "secretkey1234",
+    getServerUrl: () => `${serverUrl}:${serverPort}/api`
 });
 
 contextBridge.exposeInMainWorld('file', {
@@ -14,6 +20,7 @@ contextBridge.exposeInMainWorld('file', {
     json: {
         open: invoke('file:json:open'),
         save: (path, data) => invoke('file:json:save')(path, data),
+        download: (data, name) => invoke('file:json:download')(data, name)
     },
     scm: { open: invoke('file:scm:open') }
 });

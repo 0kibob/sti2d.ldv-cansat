@@ -51,14 +51,12 @@ async function loadMissionsForTab(tab)
 {
     throwLoaderText();
 
-    let url = 'http://localhost:81/api/missions';
-    if (tab === 'trash') { url = 'http://localhost:8000/api/missions/trash'; }
+    let url = window.api.getServerUrl()+'/missions'
+    if (tab === 'trash') { url = window.api.getServerUrl()+'/missions/trash'; }
 
     try {
         const response = await fetch(url);
         const missions = await response.json();
-        console.log(missions);
-
         if (missions.success === false || missions.data.length === 0) { throwNoMissionText(tab); return; }
         appendMissions(missions.data);
     }
@@ -67,23 +65,6 @@ async function loadMissionsForTab(tab)
         throwErrorText(err);
     }
 }
-
-// async function loadMissions()
-// {
-//     throwLoaderText();
-//     try
-//     {
-//         const response = await fetch(`http://localhost:8000/api/missions`);
-//         const missions = await response.json();
-//         console.log(missions)
-//         if (missions.success === false) { throwNoMissionText(); return; }
-//         appendMissions(missions.data);
-//     }
-//     catch (err)
-//     {
-//         throwErrorText(err)
-//     }
-// }
 
 function throwLoaderText()
 {
@@ -168,6 +149,10 @@ function appendMissions(missions)
                         onClick: () => window.page.change('view-mission', {"id": mission.id})
                     },
                     {
+                        content: 'Download', icon: "download",
+                        onClick: () => callDownloadMission(mission.id, mission.name)
+                    },
+                    {
                         content: 'Delete', icon: "trash-2",
                         onClick: () => callMarkMission(mission.id)
                     }
@@ -197,7 +182,7 @@ async function callMarkMission(mission_id)
 {
     try
     {
-        let url = `http://localhost:81/api/missions/mark?id=${mission_id}`;
+        let url = window.api.getServerUrl()+`/missions/mark?id=${mission_id}`;
         const response = await fetch(url, { method: 'GET', headers: { 'x-api-key': window.api.serverKey } });
         const result = await response.json();
         if (result.success) { window.toast.success(`Mission #${mission_id} mark as delete successfully.`); }
@@ -216,7 +201,7 @@ async function callDeleteMission(mission_id)
 {
     try
     {
-        let url = `http://localhost:81/api/missions/delete?id=${mission_id}`;
+        let url = window.api.getServerUrl()+`/missions/delete?id=${mission_id}`;
         const response = await fetch(url, { method: 'GET', headers: { 'x-api-key': window.api.serverKey } });
         const result = await response.json();
         if (result.success) { window.toast.success(`Mission #${mission_id} remove successfully.`); }
@@ -235,7 +220,7 @@ async function callRestoreMission(mission_id)
 {
     try
     {
-        let url = `http://localhost:81/api/missions/restore?id=${mission_id}`;
+        let url = window.api.getServerUrl()+`/missions/restore?id=${mission_id}`;
         const response = await fetch(url, { method: 'GET', headers: { 'x-api-key': window.api.serverKey } });
         const result = await response.json();
         if (result.success) { window.toast.success(`Mission #${mission_id} restore successfully.`); }
@@ -245,6 +230,26 @@ async function callRestoreMission(mission_id)
     {
         console.error(err);
         window.toast.error(`Error resotring Mission #${mission_id}.`);
+    }
+
+    loadMissionsForTab(currentTab)
+}
+
+async function callDownloadMission(mission_id, mission_name)
+{
+    try
+    {
+        let url = window.api.getServerUrl()+`/missions/get?id=${mission_id}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        if (!result.success) { window.toast.error(`Failed downloading Mission #${mission_id}.`); }
+        await window.file.json.download(result.data, mission_name);
+        window.toast.success(`Mission #${mission_id} download successfully.`);
+    }
+    catch (err)
+    {
+        console.error(err);
+        window.toast.error(`Error downloading Mission #${mission_id}.`);
     }
 
     loadMissionsForTab(currentTab)

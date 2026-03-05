@@ -6,7 +6,7 @@ export function initLucideMutationObserver()
     const observer = new MutationObserver((mutations) => {
         const hasIcon = mutations.some(m => 
             Array.from(m.addedNodes).some(node => node.querySelector?.("i[data-lucide]"))
-            );
+        );
         if (hasIcon) window.icons.lucide.render();
     });
 

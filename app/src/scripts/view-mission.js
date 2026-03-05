@@ -21,7 +21,7 @@ export default async function({ params }) {
 
     try
     {
-        let url = `http://localhost:8000/api/missions/get?id=${params.id}`;
+        let url = window.api.getServerUrl()+`/missions/get?id=${params.id}`;
         const response = await fetch(url);
         const result = await response.json();
         console.log(result)
