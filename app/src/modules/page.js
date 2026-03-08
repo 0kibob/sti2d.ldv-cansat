@@ -21,7 +21,8 @@ export async function change(page, params = {}, options = {})
         {
             const module = await import(`../${scriptPath}?v=${Date.now()}`);
             if (module.default) { module.default({ params, options }); }
-        } catch (err) {}
+        }
+        catch (err) { console.error("Page script failed to load:", err); }
     }
     catch (err) { content.innerHTML = `<p>Error loading page.  ${err}</p>`; }
 }

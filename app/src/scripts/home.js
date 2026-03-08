@@ -27,7 +27,7 @@ importButton?.addEventListener('click', async () => {
 
         const result = await window.file.mission.open();
         if (!result) return;
-        window.page.change('import', {"type": result.type, "data": result});
+        window.page.change('import', {"type": result.type, "data": result.data});
     }
     catch (err)
     {
