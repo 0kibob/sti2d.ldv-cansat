@@ -11,6 +11,9 @@ const durationLabel = document.getElementById("mission-duration")
 const samplesLabel = document.getElementById("mission-samples")
 const durationInterval = document.getElementById("mission-interval")
 
+let currentMission = null
+let currentType = null
+
 function makeDebugLabel(container, text) {
     const span = document.createElement("span");
     span.className = text;
@@ -20,11 +23,38 @@ function makeDebugLabel(container, text) {
 makeDebugLabel(mapContainer, "f")
 
 export default async function({ params }) {
+    currentType = params.type
     console.log(params.type)
     let mission
     if (params.type === "json") { mission = importJson(params.data) }
     if (params.type === "scm") { mission = importScm(params.data) }
+    computeSampling(mission, params.type, params.data)
     renderMission(mission)
+}
+
+function computeSampling(mission, type, raw) {
+    let interval = 1
+    let samples = 0
+
+    if (type === "json" && raw.sampling) {
+        interval = raw.sampling.interval_sec ?? 1
+        samples = raw.sampling.total_samples ?? 0
+    } else {
+        // SCM → infer from sensors
+        const s = mission.sensors
+
+        if (s.temperature) samples = s.temperature.length
+        else if (s.pressure) samples = s.pressure.length
+        else if (s.accel) samples = s.accel.length
+        else if (s.gyro) samples = s.gyro.length
+    }
+
+    const duration = samples * interval
+
+    // display
+    durationLabel.innerText = `${duration}s`
+    samplesLabel.innerText = samples
+    durationInterval.innerText = `${interval}s`
 }
 
 function importJson(data) {
@@ -53,11 +83,16 @@ function importScm(data) {
 
 function renderMission(mission) {
 
+    currentMission = mission
+
     if (mission.metadata?.name)
         nameInput.value = mission.metadata.name
 
-    if (mission.metadata?.datetime)
-        timeInput.value = mission.metadata.datetime.substring(11,16)
+    if (mission.metadata?.datetime) {
+        const dt = mission.metadata.datetime
+        timeInput.value = dt?.substring(11,16) ?? ""
+        dateInput.value = dt?.substring(0,10) ?? ""
+    }
 
     if (mission.metadata?.position)
         mapContainer.innerText =
@@ -78,3 +113,75 @@ function renderMission(mission) {
         gyroContainer.innerText =
             mission.sensors.gyro.map(v=>`x:${v[0]} y:${v[1]} z:${v[2]}`).join("\n")
 }
+
+function buildMissionForSave(type) {
+    const interval = parseInt(durationInterval.innerText) || 1
+    const samples = parseInt(samplesLabel.innerText) || 0
+
+    // --- NAME (required for SCM)
+    let name = nameInput.value?.trim()
+    if (type === "scm" && !name) {
+        throw new Error("Name required for SCM mission")
+    }
+
+    // --- DATETIME (fallback to now)
+    let datetime = null
+    if (dateInput.value && timeInput.value) {
+        datetime = `${dateInput.value}T${timeInput.value}:00Z`
+    } else {
+        datetime = new Date().toISOString()
+    }
+
+    return {
+        metadata: {
+            name: name || "Unnamed mission",
+            datetime,
+            // position: currentMission?.metadata?.position || null
+            position: currentMission?.metadata?.position || {
+                name: "Unknown",
+                lat: null,
+                lon: null
+            }
+        },
+        sampling: {
+            interval_sec: interval,
+            total_samples: samples
+        },
+        sensors: {
+            temperature: currentMission?.sensors.temperature || [],
+            pressure: currentMission?.sensors.pressure || [],
+            acceleration: currentMission?.sensors.accel || [],
+            gyro: currentMission?.sensors.gyro || []
+        }
+    }
+}
+
+async function saveMission(type) {
+    let mission
+
+    try {
+        mission = buildMissionForSave(type)
+    } catch (e) {
+        alert(e.message)
+        return
+    }
+
+    const res = await fetch(`${window.api.getServerUrl()}/missions/create`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "x-api-key": window.api.serverKey
+        },
+        body: JSON.stringify(mission)
+    })
+    const data = await res.json()
+    if (data.success) {
+        window.toast.success(`Mission saved successfully.`)
+        window.page.change('home')
+    } else {
+        window.toast.error(`Failed to save mission.`)
+    }
+}
+
+document.getElementById("confirm-button")
+    .addEventListener("click", () => saveMission(currentType))

@@ -79,7 +79,7 @@ async def edit_mission(id: int | None = None, mission: dict | None = None, x_api
 async def create_mission(mission: dict | None = None, x_api_key: str | None = Header(None)):
     if not check_key(x_api_key): return {"success": False} 
     if not mission: return {"success": False}
-    return {"success": True, "message": "Mission created"}
+    return db.create_mission(mission)
 
 
 if __name__ == "__main__":

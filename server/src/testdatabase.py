@@ -24,23 +24,22 @@ def random_mission(index: int) -> dict:
                 "name": "New York",
                 "lat": round(base_lat + random.uniform(-0.01, 0.01), 6),
                 "lon": round(base_lon + random.uniform(-0.01, 0.01), 6)
-            },
-            "duration_sec": duration
+            }
         },
         "sampling": {
             "interval_sec": interval,
             "total_samples": total_samples
         },
         "sensors": {
-            "temperature_c": [
+            "temperature": [
                 round(random.uniform(20.0, 25.0), 2),
                 round(random.uniform(20.0, 25.0), 2)
             ],
-            "pressure_pa": [
+            "pressure": [
                 random.randint(101000, 101400),
                 random.randint(101000, 101400)
             ],
-            "acceleration_m_s2": [
+            "acceleration": [
                 [
                     round(random.uniform(-0.05, 0.05), 3),
                     round(random.uniform(0.0, 0.2), 3),
@@ -52,7 +51,7 @@ def random_mission(index: int) -> dict:
                     round(random.uniform(-0.05, 0.05), 3)
                 ]
             ],
-            "gyro_deg_s": [
+            "gyro": [
                 [
                     round(random.uniform(0.0, 0.2), 3),
                     round(random.uniform(0.0, 0.2), 3),
@@ -74,7 +73,7 @@ def main():
 
     cur.execute(
         "CREATE TABLE IF NOT EXISTS missions ("
-        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        "id INTEGER PRIMARY KEY, "
         "mission TEXT NOT NULL, "
         "deleted INTEGER DEFAULT 0)"
     )

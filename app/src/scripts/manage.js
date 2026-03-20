@@ -36,10 +36,11 @@ activeTabButton?.addEventListener('click', () => setActiveTab('active'));
 trashTabButton?.addEventListener('click', () => setActiveTab('trash'));
 importButton?.addEventListener('click', async () => {
     try {
-        const result = await window.api.openJsonFile();
-        if (!result) return; // user canceled
-        window.page.change('add-mission', {"import": true, "data": JSON.stringify(result)});
-    } 
+
+        const result = await window.file.mission.open();
+        if (!result) return;
+        window.page.change('import', {"type": result.type, "data": result.data});
+    }
     catch (err)
     {
         console.error(err);

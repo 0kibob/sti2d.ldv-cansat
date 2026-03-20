@@ -16,7 +16,7 @@ class DataBase:
 
         cur.execute(
             "CREATE TABLE IF NOT EXISTS missions ("
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            "id INTEGER PRIMARY KEY, "
             "mission TEXT NOT NULL, "
             "deleted INTEGER DEFAULT 0)"
         )
@@ -39,12 +39,13 @@ class DataBase:
 
         for m_id, m_json in rows:
             mission: dict = {}
-            metadata: dict = json.loads(m_json).get("metadata")
+            metadata = json.loads(m_json).get("metadata") or {}
 
             mission["id"] = m_id
-            mission["name"] = metadata.get("name")
-            mission["datetime"] = metadata.get("datetime")
-            mission["position"] = metadata.get("position").get("name")
+            mission["name"] = metadata.get("name") or "Unnamed mission"
+            mission["datetime"] = metadata.get("datetime") or None
+            pos = metadata.get("position") or {}
+            mission["position"] = pos.get("name") or "Unknown"
             all_mission.append(mission)
 
         return {"success": True, "data": all_mission}
@@ -64,12 +65,13 @@ class DataBase:
 
         for m_id, m_json in rows:
             mission: dict = {}
-            metadata: dict = json.loads(m_json).get("metadata")
+            metadata = json.loads(m_json).get("metadata") or {}
 
             mission["id"] = m_id
-            mission["name"] = metadata.get("name")
-            mission["datetime"] = metadata.get("datetime")
-            mission["position"] = metadata.get("position").get("name")
+            mission["name"] = metadata.get("name") or "Unnamed mission"
+            mission["datetime"] = metadata.get("datetime") or None
+            pos = metadata.get("position") or {}
+            mission["position"] = pos.get("name") or "Unknown"
             all_mission.append(mission)
 
         return {"success": True, "data": all_mission}
