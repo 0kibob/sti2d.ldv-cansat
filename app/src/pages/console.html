@@ -1,0 +1,28 @@
+<div class="h-full flex flex-col gap-sm">
+    <div class="flex flex-col h-full">
+        <div class="flex flex-row">
+            <!-- <button id="active-tab-button" class="tab active">Missions</button>
+            <button id="trash-tab-button" class="tab">Trash</button> -->
+            <div class="flex flex-row items-center gap-xs p-bottom-xs w-full">
+
+                <!-- <div class="input min-w-md text-primary">
+                    <i data-lucide="search"></i>
+                    <input type="search" placeholder="Search missions…"/>
+                </div> -->
+
+
+                <button id="port-button" class="icon border w-fit hover-accent"><p id="current-port">Select Port</p><i data-lucide="chevron-down" class="lg"></i></button>
+
+                <button id="refresh-button" class="icon border w-fit hover-accent"><i data-lucide="refresh-cw" class="lg"></i></button>
+                <div class="flex-1"></div>
+                <button id="copy-button" class="icon border w-fit hover-accent"><i data-lucide="clipboard-copy" class="lg"></i></button>
+                <button id="clear-button" class="icon border w-fit hover-accent"><i data-lucide="eraser" class="lg"></i></button>
+            </div>
+        </div>
+
+        <div id="console" class="flex flex-col flex-1 border-1 r-md bg-panel text-primary p-sm gap-xs overflow-y-auto overflow-x-h"></div>
+
+        <div id="debug" class="text-primary"></div>
+
+    </div>
+</div>

@@ -51,6 +51,12 @@
     z-index: 10;
 }
 
+.dropdown-menu.left
+{
+    right: auto;
+    left: 0;
+}
+
 .dropdown-item:hover
 {
     background: var(--accent);

@@ -53,7 +53,7 @@ async function loadMissionsForTab(tab)
     throwLoaderText();
 
     let url = window.api.getServerUrl()+'/missions'
-    if (tab === 'trash') { url = window.api.getServerUrl()+'/missions/trash'; }
+    if (tab === 'trash') { url = url +'/trash'; }
 
     try {
         const response = await fetch(url);
@@ -147,7 +147,7 @@ function appendMissions(missions)
                 items: [
                     {
                         content: 'View', icon: "eye",
-                        onClick: () => window.page.change('view-mission', {"id": mission.id})
+                        onClick: () => window.page.change('view', {"id": mission.id})
                     },
                     {
                         content: 'Download', icon: "download",

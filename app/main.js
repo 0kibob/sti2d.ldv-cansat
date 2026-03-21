@@ -1,10 +1,14 @@
 const { app, BrowserWindow, globalShortcut } = require('electron/main')
 const { registerHandlers } = require('./src/ipc/handler');
+const { setupCSP } = require('./src/security.js');
 const path = require('node:path')
 
 app.win = null
+app.serverUrl = "http://localhost";
+app.serverPort = "8000";
 
 app.on('ready', () => {
+    setupCSP(app)
     app.win = new BrowserWindow({
         width: 1280,
         height: 720,

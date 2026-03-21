@@ -13,7 +13,7 @@ export default async function({ params }) {
             return;
         } catch (err) {
             console.error('Failed to parse imported mission', err);
-            window.toast.error('Imported file is not valid JSON.');
+            window.toast.error('Imported file is not valid JSON.');setupCSP(app)
             sessionStorage.removeItem('importedMission');
             return;
         }
