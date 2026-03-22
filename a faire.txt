@@ -1,3 +1,29 @@
+
+| Sensor      | Type    | Scale | Offset | Resolution | Units on JS side | Raw range      |
+|-------------|---------|-------|--------|------------|------------------|----------------|
+| Temperature | uint16  | ×100  | +40    | 0.01 °C    | °C               | 0 → 12500      |
+| Pressure    | uint16  | ×10   | 0      | 0.1 hPa    | hPa              | 3000 → 11000   |
+| Accel X/Y/Z | int16   | ×1000 | 0      | 0.001 g    | g                | -16000 → 16000 |
+| Gyro X/Y/Z  | int16   | ×10   | 0      | 0.1 dps    | dps              | -20000 → 20000 |
+
+
+Pressicion to use
+
+Temperature → 2 bytes
+Pressure → 2 bytes
+Acceleration (X, Y, Z) → 6 bytes
+Gyroscope (X, Y, Z) → 6 bytes
+
+Temperature (de -40 à +85 °C)
+Temperature -> 0.005 res
+uint16_t sendTemp = (tempC + 40) * 200;
+const tempC = (tempRaw / 200) - 40;
+
+Pressure (de 300 à 1100 hPa)
+Pressure -> 0.1 res
+uint16_t sendPres = (pressure_hPa - 300) * 10;
+const pressure_hPa = (presRaw / 10) + 300;
+
 web: pas obliger
 
 dashboard:

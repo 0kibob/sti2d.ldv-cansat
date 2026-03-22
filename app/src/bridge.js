@@ -20,13 +20,33 @@ contextBridge.exposeInMainWorld('api', {
 contextBridge.exposeInMainWorld('serial', {
     list: () => ipcRenderer.invoke('serial:list'),
     connect: (port) => ipcRenderer.invoke('serial:connect', port),
-    getCurrent: () => ipcRenderer.invoke('serial:getCurrent'),
+    disconnect: () => ipcRenderer.invoke('serial:disconnect'),
+    current: () => ipcRenderer.invoke('serial:current'),
     send: (data) => ipcRenderer.invoke('serial:send', data),
-    
-    onData: (cb) => ipcRenderer.on('serial:data', (_, d) => cb(d)),
-    onDisconnect: (cb) => ipcRenderer.on('serial:disconnect', cb),
-    onError: (cb) => ipcRenderer.on('serial:error', (_, e) => cb(e))
+    on: {
+        data: (cb) => {
+            const handler = (_, d) => cb(d);
+            ipcRenderer.removeAllListeners('serial:on:data');
+            ipcRenderer.on('serial:on:data', handler);
+        },
+        disconnect: (cb) => {
+            ipcRenderer.removeAllListeners('serial:on:disconnect');
+            ipcRenderer.on('serial:on:disconnect', cb);
+        },
+        error: (cb) => {
+            const handler = (_, e) => cb(e);
+            ipcRenderer.removeAllListeners('serial:on:error');
+            ipcRenderer.on('serial:on:error', handler);
+        }
+    }
 })
+
+contextBridge.exposeInMainWorld('helper', {
+    convert: {
+        buffer: (buffer) => ipcRenderer.invoke('helper:convert:buffer', buffer),
+        size: () => ipcRenderer.invoke('helper:convert:size'),
+    }
+});
 
 contextBridge.exposeInMainWorld('file', {
     open: () => ipcRenderer.invoke('file:open'),

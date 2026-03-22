@@ -1,3 +1,5 @@
+export async function init({ params } = {}) {
+
 const portButton = document.getElementById("port-button");
 const portButtonLabel = document.getElementById("current-port");
 const refreshButton = document.getElementById("refresh-button");
@@ -5,41 +7,43 @@ const copyButton = document.getElementById("copy-button");
 const clearButton = document.getElementById("clear-button");
 const consoleEl = document.getElementById("console");
 
-let selectedPort = null;
-let isSwitching = false;
+let currentPort = null;
 
-async function loadPorts() {
+async function listAvailablePorts() {
     const ports = await window.serial.list();
-
     window.dropdown.attach(portButton, {
         left: true,
         items: ports.map(p => ({
             content: p.path,
-            onClick: async () => {
-                if (selectedPort === p.path) return;
-                isSwitching = true;
-                try {
-                    await connectPort(p.path);
-                } catch (err) {
-                    console.error(err);
-                } finally {
-                    isSwitching = false;
-                }
-            }
+            onClick: async () => await selectPort(p.path)
         }))
     });
 }
 
-async function init() {
-    const current = await window.serial.getCurrent();
-    if (current) {
-        selectedPort = current;
-        portButtonLabel.textContent = current;
+async function selectPort(path) {
+    if (await window.serial.current() === path) { return }
+    try {
+        await window.serial.connect(path);
+        currentPort = path;
+        portButtonLabel.textContent = path;
+        writeToConsole(`[Connected to port ${path}]`, { muted: true });
+        window.toast.info("Connected to", path);
     }
-    loadPorts();
+    catch { window.toast.error("Failed to connected to", path); return }
 }
 
-function logMessage(message, { muted } = {}) {
+async function init() {
+    const current = await window.serial.current()
+    if (current) {
+        portButtonLabel.textContent = current;
+        currentPort = current;
+        writeToConsole(`[Connected to port ${current}]`, { muted: true });
+    }
+    await listAvailablePorts()
+}
+
+
+function writeToConsole(message, { muted } = {}) {
     const div = document.createElement("div");
     div.textContent = message;
     if (muted) div.classList.add("text-muted-foreground");
@@ -47,44 +51,42 @@ function logMessage(message, { muted } = {}) {
     consoleEl.scrollTop = consoleEl.scrollHeight;
 }
 
-async function connectPort(path) {
-    await window.serial.connect(path);
-    selectedPort = path;
-    portButtonLabel.textContent = path;
-    logMessage(`[Connected to port ${path}]`, { muted: true });
-    window.toast.info("Connected to", path);
+async function parseSensorData(buffer) {
+    const parsed = await window.helper.convert.buffer(buffer);
+
+    // take first sample
+    const temp   = parsed.temperature[0];
+    const pres   = parsed.pressure[0];
+    const accel  = [parsed.accelX[0], parsed.accelY[0], parsed.accelZ[0]];
+    const gyro   = [parsed.gyroX[0], parsed.gyroY[0], parsed.gyroZ[0]];
+
+    return `Temp: ${temp}, Pres: ${pres}, Accel: [${accel.join(',')}], Gyro: [${gyro.join(',')}]`;
 }
 
-// Event listeners
-refreshButton?.addEventListener('click', () => loadPorts());
+window.serial.on.data(async (data) => {
+    writeToConsole(await parseSensorData(data));
+});
 
+window.serial.on.error((err) => { writeToConsole(`[Error] ${err}`, { muted: true }); });
+window.serial.on.disconnect(async () => {
+    window.toast.error("Disconnect from", currentPort);
+    writeToConsole(`[Disconnected from port ${currentPort}]`, { muted: true });
+    portButtonLabel.textContent = "Select Port";
+    currentPort = null;
+    setTimeout(listAvailablePorts, 200);
+});
+
+refreshButton?.addEventListener('click', () => listAvailablePorts());
 copyButton?.addEventListener('click', async () => {
     const text = Array.from(consoleEl.children).map(div => div.textContent).join('\n');
     await navigator.clipboard.writeText(text);
     window.toast.info("Console copied");
 });
-
 clearButton?.addEventListener('click', () => {
     consoleEl.innerHTML = '';
     window.toast.info("Console cleared");
 });
 
-// Serial events
-window.serial.onData((data) => {
-    logMessage(data);
-});
+init()
 
-window.serial.onDisconnect(() => {
-    if (isSwitching) return;
-    logMessage(`[Disconnected from port ${selectedPort}]`, { muted: true });
-    window.toast.error("Disconnect from", selectedPort);
-    selectedPort = null;
-    portButtonLabel.textContent = "Select Port";
-    setTimeout(loadPorts, 200); // reload ports after short delay
-});
-
-window.serial.onError((err) => {
-    logMessage(`[Error] ${err}`, { muted: true });
-});
-
-init();
+}

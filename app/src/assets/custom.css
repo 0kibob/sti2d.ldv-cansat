@@ -1,3 +1,32 @@
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: var(--panel);
+    border-radius: calc(var(--radius) * 1);
+}
+
+/* Thumb */
+::-webkit-scrollbar-thumb {
+    background: var(--muted);
+    border-radius: calc(var(--radius) * 1);
+    border: 2px solid var(--panel); /* gives padding effect */
+}
+
+/* Hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+
+/* Active (click) */
+::-webkit-scrollbar-thumb:active {
+    background: var(--primary);
+}
+
 #sidebar #sidebar-chevron svg { transition: transform 0.3s ease; justify-self: end; }
 #sidebar.open #sidebar-chevron svg { transform: rotate(180deg);  }
 
@@ -19,22 +48,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .dropdown-menu
 {
     position: absolute;
@@ -48,7 +61,7 @@
     border: 1px solid var(--border);
     border-radius: calc(var(--radius) * .75);
     box-shadow: 0 10px 20px rgba(0,0,0,.15);
-    z-index: 10;
+    z-index: 100;
 }
 
 .dropdown-menu.left

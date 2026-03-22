@@ -1,3 +1,5 @@
+export async function init({ params } = {}) {
+
 const refreshButton = document.getElementById("refresh-button");
 const addButton = document.getElementById("add-button");
 const importButton = document.getElementById("import-button");
@@ -6,8 +8,7 @@ const missionContainer = document.getElementById("missions-list");
 const activeTabButton = document.getElementById("active-tab-button");
 const trashTabButton = document.getElementById("trash-tab-button");
 
-const tabs =
-{
+const tabs = {
     active: activeTabButton,
     trash: trashTabButton
 };
@@ -31,7 +32,7 @@ function setActiveTab(tabName)
 }
 
 refreshButton?.addEventListener('click', () => { loadMissionsForTab(currentTab); });
-addButton?.addEventListener('click', () => { window.page.change("add-mission") });
+addButton?.addEventListener('click', () => { window.page.change('add') });
 activeTabButton?.addEventListener('click', () => setActiveTab('active'));
 trashTabButton?.addEventListener('click', () => setActiveTab('trash'));
 importButton?.addEventListener('click', async () => {
@@ -257,3 +258,5 @@ async function callDownloadMission(mission_id, mission_name)
 }
 
 loadMissionsForTab(currentTab)
+
+}
