@@ -52,15 +52,24 @@ function writeToConsole(message, { muted } = {}) {
 }
 
 async function parseSensorData(buffer) {
-    const parsed = await window.helper.convert.buffer(buffer);
+    const PACKET_SIZE = await window.convert.size(); // 16
+    if (buffer.length % PACKET_SIZE !== 0) return "Incomplete packet";
 
-    // take first sample
-    const temp   = parsed.temperature[0];
-    const pres   = parsed.pressure[0];
-    const accel  = [parsed.accelX[0], parsed.accelY[0], parsed.accelZ[0]];
-    const gyro   = [parsed.gyroX[0], parsed.gyroY[0], parsed.gyroZ[0]];
+    const outputs = [];
 
-    return `Temp: ${temp}, Pres: ${pres}, Accel: [${accel.join(',')}], Gyro: [${gyro.join(',')}]`;
+    for (let offset = 0; offset < buffer.length; offset += PACKET_SIZE) {
+        const slice = buffer.slice(offset, offset + PACKET_SIZE);
+        const parsed = await window.convert.buffer(slice);
+
+        const temp   = parsed.temperature[0];
+        const pres   = parsed.pressure[0];
+        const accel  = [parsed.accelX[0], parsed.accelY[0], parsed.accelZ[0]];
+        const gyro   = [parsed.gyroX[0], parsed.gyroY[0], parsed.gyroZ[0]];
+
+        outputs.push(`Temp: ${temp}, Pres: ${pres}, Accel: [${accel.join(',')}], Gyro: [${gyro.join(',')}]`);
+    }
+
+    return outputs.join("\n");
 }
 
 window.serial.on.data(async (data) => {

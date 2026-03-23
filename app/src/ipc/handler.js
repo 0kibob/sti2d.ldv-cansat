@@ -3,7 +3,7 @@ const { Buffer } = require('buffer');
 const { SerialPort } = require('serialport')
 
 const file = require('../modules/file');
-const { parseSensorBuffer, PACKET_SIZE } = require('../modules/convert.js')
+const { parseSensorBuffer, bytesToUint16, PACKET_SIZE } = require('../modules/convert.js')
 
 const modules = [
     file,
@@ -66,7 +66,9 @@ function registerHandlers(app) {
 
     handle('helper:convert:buffer')((_, buffer) => parseSensorBuffer(Buffer.from(buffer)));
     handle('helper:convert:size')(() => PACKET_SIZE);
-        
+    
+    handle('helper:convert:uint16')((_, data) => bytesToUint16(data));
+
     for (const module of modules) {
         if (!module.handlers) continue;
 

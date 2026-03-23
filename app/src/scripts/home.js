@@ -1,7 +1,5 @@
 export async function init({ params } = {}) {
 
-console.log(await window.helper.convert.size())
-
 const addButton = document.getElementById("add-button");
 const importButton = document.getElementById("import-button");
 

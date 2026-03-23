@@ -41,11 +41,10 @@ contextBridge.exposeInMainWorld('serial', {
     }
 })
 
-contextBridge.exposeInMainWorld('helper', {
-    convert: {
-        buffer: (buffer) => ipcRenderer.invoke('helper:convert:buffer', buffer),
-        size: () => ipcRenderer.invoke('helper:convert:size'),
-    }
+contextBridge.exposeInMainWorld('convert', {
+    buffer: (buffer) => ipcRenderer.invoke('helper:convert:buffer', buffer),
+    size: () => ipcRenderer.invoke('helper:convert:size'),
+    uint16: (data) => ipcRenderer.invoke('helper:convert:uint16', data),
 });
 
 contextBridge.exposeInMainWorld('file', {
