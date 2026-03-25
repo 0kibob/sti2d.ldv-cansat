@@ -1,4 +1,21 @@
 
+For SPI communication only with the SX1262, the necessary pins are:
+
+VCC – 3.3 V power supply
+GND – common ground
+SCK – SPI clock (from MCU)
+MOSI – SPI master → module
+MISO – SPI module → master
+NSS / CS – chip select (active low)
+
+Optional but recommended for proper SPI operation:
+
+BUSY – indicates module is busy; MCU should wait before sending SPI commands
+NRST – reset the module
+
+You do not need the DIO pins if you only want SPI data transfer.
+
+
 | Sensor      | Type    | Scale | Offset | Resolution | Units on JS side | Raw range      |
 |-------------|---------|-------|--------|------------|------------------|----------------|
 | Temperature | uint16  | ×100  | +40    | 0.01 °C    | °C               | 0 → 12500      |

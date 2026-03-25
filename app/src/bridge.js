@@ -1,7 +1,9 @@
 const { contextBridge, ipcRenderer, shell } = require('electron')
 const { createIcons, icons } = require("lucide");
-
-// const invoke = (channel) => (...args) => ipcRenderer.invoke(channel, ...args);
+// const { Chart, registerables } = require("chart.js");
+// const Chart = require('chart.js/auto');
+const { Chart } = require('chart.js/auto');
+contextBridge.exposeInMainWorld('Chart', Chart);
 
 let cachedServerUrl = null
 

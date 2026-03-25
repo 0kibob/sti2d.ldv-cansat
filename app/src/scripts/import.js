@@ -16,6 +16,23 @@ const durationInterval = document.getElementById("mission-interval");
 let currentMission = null;
 let currentType = params?.type;
 
+// console.log(window.chart);
+
+// const tempCtx = document.getElementById("tempChart").getContext("2d");
+// const tempChart = new window.chart(tempCtx, {
+//     type: "line",
+//     data: { labels: [], datasets: [{ label: "Temperature", data: [], borderColor: "red", fill: false }] },
+//     options: { animation: false, responsive: true }
+// });
+
+// const presCtx = document.getElementById("presChart").getContext("2d");
+// const presChart = new window.chart(presCtx, {
+//     type: "line",
+//     data: { labels: [], datasets: [{ label: "Pressure", data: [], borderColor: "blue", fill: false }] },
+//     options: { animation: false, responsive: true }
+// });
+
+
 // --- Helpers
 function makeDebugLabel(container, text) {
     const span = document.createElement("span");
@@ -92,6 +109,34 @@ function renderMission(mission) {
     if (mission.sensors.gyro)
         gyroContainer.innerText = mission.sensors.gyro.map(v=>`x:${v[0]} y:${v[1]} z:${v[2]}`).join("\n");
 }
+
+// function renderMission(mission) {
+//     currentMission = mission;
+
+//     // update inputs
+//     if (mission.metadata?.name) nameInput.value = mission.metadata.name;
+//     if (mission.metadata?.datetime) {
+//         const dt = mission.metadata.datetime;
+//         timeInput.value = dt?.substring(11,16) ?? "";
+//         dateInput.value = dt?.substring(0,10) ?? "";
+//     }
+
+//     // update sensor divs
+//     mapContainer.innerText = mission.metadata?.position
+//         ? `${mission.metadata.position.name} (${mission.metadata.position.lat}, ${mission.metadata.position.lon})` : "";
+
+//     // update charts
+//     if (mission.sensors.temperature) {
+//         tempChart.data.labels = mission.sensors.temperature.map((_, i) => i);
+//         tempChart.data.datasets[0].data = mission.sensors.temperature;
+//         tempChart.update();
+//     }
+//     if (mission.sensors.pressure) {
+//         presChart.data.labels = mission.sensors.pressure.map((_, i) => i);
+//         presChart.data.datasets[0].data = mission.sensors.pressure;
+//         presChart.update();
+//     }
+// }
 
 function buildMissionForSave(type) {
     const interval = parseInt(durationInterval.innerText) || 1;
