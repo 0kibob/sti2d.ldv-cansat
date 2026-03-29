@@ -46,6 +46,6 @@ app.on('ready', () => {
 })
 
 app.debug = function () {
-    app.win.toggleDevTools()
+    // app.win.toggleDevTools()
     globalShortcut.register('F1', () => { app.win.toggleDevTools() })
 }

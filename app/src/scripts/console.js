@@ -3,6 +3,7 @@ export async function init({ params } = {}) {
 const portButton = document.getElementById("port-button");
 const portButtonLabel = document.getElementById("current-port");
 const refreshButton = document.getElementById("refresh-button");
+const stopButton = document.getElementById("stop-button");
 const copyButton = document.getElementById("copy-button");
 const clearButton = document.getElementById("clear-button");
 const consoleEl = document.getElementById("console");
@@ -86,6 +87,7 @@ window.serial.on.disconnect(async () => {
 });
 
 refreshButton?.addEventListener('click', () => listAvailablePorts());
+stopButton?.addEventListener('click', () => window.serial.disconnect());
 copyButton?.addEventListener('click', async () => {
     const text = Array.from(consoleEl.children).map(div => div.textContent).join('\n');
     await navigator.clipboard.writeText(text);

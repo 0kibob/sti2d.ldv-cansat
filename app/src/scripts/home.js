@@ -7,8 +7,6 @@ addButton?.addEventListener('click', async () => {
     window.page.change('add');
 });
 
-console.log(window.chart);
-
 importButton?.addEventListener('click', async () => {
     try {
 

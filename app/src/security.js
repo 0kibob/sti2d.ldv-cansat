@@ -12,7 +12,8 @@ function setupCSP(app) {
                         "default-src 'self'",
                         "script-src 'self'",
                         "style-src 'self' 'unsafe-inline'",
-                        `connect-src 'self' ${fullServer}`
+                        "img-src 'self' https://*.tile.openstreetmap.org",
+                        `connect-src 'self' ${fullServer} https://nominatim.openstreetmap.org`
                     ].join('; ')
                 ]
             }

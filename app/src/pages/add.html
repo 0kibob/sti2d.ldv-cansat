@@ -57,14 +57,12 @@
     </div>
 
     <div class="flex flex-col flex-1 overflow-x-h overflow-y-auto">
-        <div class="grid gap-xs flex-1">
-            <div id="map" class="item bg-panel border-1 r-md text-primary p-sm"></div>
-            <div id="temp" class="item bg-panel border-1 r-md text-primary p-sm"></div>
-            
-            <div id="pres" class="item bg-panel border-1 r-md text-primary p-sm"></div>
-            <div id="accel" class="item bg-panel border-1 r-md text-primary p-sm"></div>
-            <div id="gyro" class="item bg-panel border-1 r-md text-primary p-sm"></div>
+        <div class="grid gap-xs">
+            <div id="map" class="bg-panel border-1 r-md text-primary"></div>
+            <div id="temp" class="bg-panel border-1 r-md text-primary p-sm chart-panel"><canvas id="tempChart"></canvas></div>
+            <div id="pres" class="bg-panel border-1 r-md text-primary p-sm chart-panel"><canvas id="presChart"></canvas></div>
+            <div id="accel" class="bg-panel border-1 r-md text-primary p-sm chart-panel"><canvas id="accelChart"></canvas></div>
+            <div id="gyro" class="bg-panel border-1 r-md text-primary p-sm chart-panel"><canvas id="gyroChart"></canvas></div>
         </div>
     </div>
-
 </div>

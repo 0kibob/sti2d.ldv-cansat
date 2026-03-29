@@ -118,9 +118,31 @@ button.tab.active::before, .button.tab.active::before
     max-width: 100%;
 }
 
+.chart-panel {
+    min-height: 260px;
+    height: auto;
+    position: relative;
+}
+
+#map {
+    position: relative;
+    min-height: 280px;
+    width: 100%;
+    z-index: 0;
+}
+
+.leaflet-container {
+    z-index: 0;
+}
+
+.chart-panel canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 .grid
 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(calc(var(--container-size) * 1.8), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(calc(var(--container-size) * 1.8), fr));
     grid-auto-rows: minmax(300px, auto);
 }

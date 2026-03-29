@@ -1,1 +1,50 @@
-<p id="debug" class="text-foreground"></p>
+<div class="h-full flex flex-col gap-xs">
+    <div class="flex flex-col r-md gap-xs overflow-hidden">
+        <div class="flex flex-row bg-panel border-1 r-md p-xs gap-xs flex-wrap">
+            <div class="flex flex-col gap-xxs min-w-sm">
+                <label class="text-xs text-primary">Mission Name</label>
+                <span id="mission-name" class="text-primary border-1 r-sm p-xs">–</span>
+            </div>
+
+            <div class="flex flex-col gap-xxs min-w-xxs">
+                <label class="text-xs text-primary">Time</label>
+                <span id="mission-time" class="text-primary border-1 r-sm p-xs">–</span>
+            </div>
+
+            <div class="flex flex-col gap-xxs min-w-xxs">
+                <label class="text-xs text-primary">Date</label>
+                <span id="mission-date" class="text-primary border-1 r-sm p-xs">–</span>
+            </div>
+
+            <div class="flex flex-col gap-xxs min-w-xxs">
+                <label class="text-xs text-primary">Duration</label>
+                <span id="mission-duration" class="text-primary border-1 r-sm p-xs">–</span>
+            </div>
+
+            <div class="flex flex-col gap-xxs min-w-xxs">
+                <label class="text-xs text-primary">Samples</label>
+                <span id="mission-samples" class="text-primary border-1 r-sm p-xs">–</span>
+            </div>
+
+            <div class="flex flex-col gap-xxs min-w-xxs">
+                <label class="text-xs text-primary">Interval</label>
+                <span id="mission-interval" class="text-primary border-1 r-sm p-xs">–</span>
+            </div>
+
+            <div class="flex flex-col gap-xxs min-w-full">
+                <label class="text-xs text-primary">Position</label>
+                <span id="mission-position" class="text-primary border-1 r-sm p-xs">–</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col flex-1 overflow-x-h overflow-y-auto">
+        <div class="grid gap-xs">
+            <div id="map" class="bg-panel border-1 r-md text-primary"></div>
+            <div id="temp" class="bg-panel border-1 r-md text-primary p-sm chart-panel"><canvas id="tempChart"></canvas></div>
+            <div id="pres" class="bg-panel border-1 r-md text-primary p-sm chart-panel"><canvas id="presChart"></canvas></div>
+            <div id="accel" class="bg-panel border-1 r-md text-primary p-sm chart-panel"><canvas id="accelChart"></canvas></div>
+            <div id="gyro" class="bg-panel border-1 r-md text-primary p-sm chart-panel"><canvas id="gyroChart"></canvas></div>
+        </div>
+    </div>
+</div>
