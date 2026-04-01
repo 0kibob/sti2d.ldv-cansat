@@ -15,7 +15,9 @@ const uint8_t RADIO_POWR = 22;
 const uint8_t RADIO_SYNC = 18;
 
 constexpr uint8_t BUFFER_SIZE = 5;
-constexpr uint32_t SAMPLE_PERIOD = 2000; // 1s
+constexpr uint32_t SAMPLE_PERIOD = 1000;
+
+const uint32_t DEBOUNCE = 200;
 
 struct Pins
 {
