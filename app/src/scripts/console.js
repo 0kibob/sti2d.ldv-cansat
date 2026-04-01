@@ -73,10 +73,32 @@ async function parseSensorData(buffer) {
     return outputs.join("\n");
 }
 
-window.serial.on.data(async (data) => {
-    writeToConsole(await parseSensorData(data));
-});
+async function formatSerialData(data) {
+    if (typeof data === 'string') {
+        return data;
+    }
 
+    const bytes = data instanceof ArrayBuffer
+        ? new Uint8Array(data)
+        : ArrayBuffer.isView(data)
+            ? new Uint8Array(data.buffer, data.byteOffset, data.byteLength)
+            : null;
+
+    if (!bytes) {
+        return String(data);
+    }
+
+    const text = new TextDecoder().decode(bytes);
+    if (/^[\t\n\r -~]+$/.test(text)) {
+        return text;
+    }
+
+    return await parseSensorData(bytes);
+}
+
+window.serial.on.data(async (data) => {
+    writeToConsole(await formatSerialData(data));
+});
 window.serial.on.error((err) => { writeToConsole(`[Error] ${err}`, { muted: true }); });
 window.serial.on.disconnect(async () => {
     window.toast.error("Disconnect from", currentPort);

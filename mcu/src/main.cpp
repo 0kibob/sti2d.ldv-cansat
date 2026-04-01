@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <Wire.h>
+
 #include <Adafruit_BME280.h>
 #include <RadioLib.h>
 #include <LSM6DS3.h>
@@ -10,25 +10,19 @@
 
 Adafruit_BME280 bme;
 LSM6DS3 imu(I2C_MODE, LSM_ADDR);
-// SX1262 radio = new Module(Pins::WIO_NSS, Pins::WIO_DIO, Pins::WIO_NRST, Pins::WIO_BUSY);
+SX1262 radio = SX1262(new Module(Pins::WIO_NSS, Pins::WIO_DIO, Pins::WIO_NRST, Pins::WIO_BUSY));
 
 void setup()
 {
     Serial.begin(BAUD_RATE);
     Serial1.begin(LOG_RATE);
     Wire.begin();
+    SPI.begin();
     while (!Serial) {}
-    if (!bme.begin(BME_ADDR)) {Serial.println("BME FAIL");}
-    if (imu.begin() != 0) {Serial.println("IMU FAIL");}
-
-    // int radioState = radio.begin(869.45);
-
-    // if (radioState != RADIOLIB_ERR_NONE) {
-    //     Serial.print("Init failed: ");
-    //     Serial.println(radioState);
-    //     while (true);
-    // }
-    // Serial.println("Radio OK");
+    if (!bme.begin(BME_ADDR)) { Serial.println("BME FAIL"); }
+    if (imu.begin() != 0) { Serial.println("IMU FAIL"); }
+    int radioState = radio.begin(RADIO_FREQ, RADIO_BNWH, RADIO_SPFC, RADIO_CDRT, RADIO_SYNC, RADIO_POWR, 8u, 1.8f, false);
+    if (radioState != RADIOLIB_ERR_NONE) { Serial.print("WIO FAIL"); }
 }
 
 bool isTelemetryEnable = true;
@@ -51,6 +45,7 @@ Packet createPacket()
 
 void loop()
 {
+    int16_t radioState = 0;
     uint32_t now = millis();
 
     if (now - lastSampleTime >= SAMPLE_PERIOD)
@@ -59,15 +54,17 @@ void loop()
         Packet pkt = createPacket();
 
         if (packetIndex < BUFFER_SIZE) { packetBuffer[packetIndex++] = pkt; }
-        Serial1.write((uint8_t*)&pkt, sizeof(pkt));
+        // Serial1.write((uint8_t*)&pkt, sizeof(pkt));
         // Serial.write((uint8_t*)&pkt, sizeof(pkt));
         // printPacketDebug(pkt);
         
         if (packetIndex >= BUFFER_SIZE)
         {
             Serial.write((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
-            // radio.transmit((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
+            radioState = radio.transmit((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
             packetIndex = 0;
         }
     }
+
+    if (radioState != RADIOLIB_ERR_NONE) {Serial.print("WIO FAIL");}
 }
