@@ -81,11 +81,11 @@ void loop()
     int16_t radioState = 0;
     uint32_t now = millis();
 
-    if (isFalling) {
-        char buf[32];
-        snprintf(buf, sizeof(buf), "value=%.2f", accel);
-        radioState = radio.transmit(buf);
-    }
+    // if (isFalling) {
+    //     char buf[32];
+    //     snprintf(buf, sizeof(buf), "value=%.2f", accel);
+    //     radioState = radio.transmit(buf);
+    // }
 
     if (now - lastSampleTime >= SAMPLE_PERIOD && isTelemetryEnable)
     {
@@ -96,11 +96,13 @@ void loop()
         Serial1.write((uint8_t*)&pkt, sizeof(pkt));
         // printPacketDebug(pkt);
         
-        if (packetIndex >= BUFFER_SIZE && isFalling)
-        // if (packetIndex >= BUFFER_SIZE)
+        if (packetIndex >= BUFFER_SIZE)
         {
-            Serial.write((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
-            radioState = radio.transmit((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
+            if (isFalling)
+            {
+                Serial.write((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
+                radioState = radio.transmit((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
+            }
             packetIndex = 0;
         }
     }
