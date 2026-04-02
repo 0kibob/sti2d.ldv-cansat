@@ -1,6 +1,5 @@
 #include <Arduino.h>
 
-#include <ArduinoLowPower.h>
 #include <Adafruit_BME280.h>
 #include <RadioLib.h>
 #include <LSM6DS3.h>
@@ -13,10 +12,19 @@ Adafruit_BME280 bme;
 LSM6DS3 imu(I2C_MODE, LSM_ADDR);
 SX1262 radio = SX1262(new Module(Pins::WIO_NSS, Pins::WIO_DIO, Pins::WIO_NRST, Pins::WIO_BUSY));
 
-void powerWake()
-{
-    Serial.print("Wake up");
-}
+Packet packetBuffer[BUFFER_SIZE];
+uint8_t packetIndex = 0;
+uint64_t lastSampleTime = 0;
+
+bool isTelemetryEnable = true; // true by default
+uint64_t lastTelemetryDebounceTime = 0;
+bool isPowerEnable = true; // true by default
+uint64_t lastPowerDebounceTime = 0;
+bool isFalling = false; // Default false, true for testing
+
+uint64_t lastAltitudeDebounceTime = 0;
+float lastAltitude = 0;
+float deltaAltitude = 0;
 
 void setup()
 {
@@ -33,8 +41,7 @@ void setup()
     pinMode(Pins::POW_BTN, INPUT_PULLUP);
     pinMode(Pins::ANT_LED, OUTPUT);
     pinMode(Pins::POW_LED, OUTPUT);
-    LowPower.attachInterruptWakeup(Pins::POW_BTN, powerWake, FALLING);
-
+    // Faut fix mais ya plus de temps
     // Serial1.print("new ");
     // Serial1.print("mission.scm");
     // Serial1.write(13);
@@ -47,15 +54,6 @@ void setup()
     // while(1) { if(Serial1.available()) if(Serial1.read() == '<') break; }
     Serial.print("SUCCESS INIT");
 }
-
-Packet packetBuffer[BUFFER_SIZE];
-uint8_t packetIndex = 0;
-uint64_t lastSampleTime = 0;
-
-bool isTelemetryEnable = true;
-uint64_t lastTelemetryTime = 0;
-
-bool isFalling = true; // Default false, true for testing
 
 Packet createPacket()
 {
@@ -76,11 +74,20 @@ void loop()
     float ay = imu.readFloatAccelY();
     float az = imu.readFloatAccelZ();
     float accel = sqrtf(ax*ax + ay*ay + az*az);
+    
+    isFalling = accel < FALL_THRESHOLD;
+
 
     int16_t radioState = 0;
     uint32_t now = millis();
 
-    if (now - lastSampleTime >= SAMPLE_PERIOD && isTelemetryEnable && isFalling)
+    if (isFalling) {
+        char buf[32];
+        snprintf(buf, sizeof(buf), "value=%.2f", accel);
+        radioState = radio.transmit(buf);
+    }
+
+    if (now - lastSampleTime >= SAMPLE_PERIOD && isTelemetryEnable)
     {
         lastSampleTime = now;
         Packet pkt = createPacket();
@@ -89,7 +96,8 @@ void loop()
         Serial1.write((uint8_t*)&pkt, sizeof(pkt));
         // printPacketDebug(pkt);
         
-        if (packetIndex >= BUFFER_SIZE)
+        if (packetIndex >= BUFFER_SIZE && isFalling)
+        // if (packetIndex >= BUFFER_SIZE)
         {
             Serial.write((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
             radioState = radio.transmit((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
@@ -99,11 +107,20 @@ void loop()
 
     if (radioState != RADIOLIB_ERR_NONE) {Serial.print("WIO ERROR");}
 
-    if (!digitalRead(Pins::ANT_BTN) == HIGH && millis() - lastTelemetryTime > DEBOUNCE)
+    if (digitalRead(Pins::ANT_BTN) == LOW && millis() - lastTelemetryDebounceTime > DEBOUNCE)
     {
         isTelemetryEnable = !isTelemetryEnable;
-        lastTelemetryTime = millis();
+        lastTelemetryDebounceTime = millis();
+    }
+
+    if (digitalRead(Pins::POW_BTN) == LOW && millis() - lastPowerDebounceTime > DEBOUNCE)
+    {
+        isPowerEnable = !isPowerEnable;
+        lastPowerDebounceTime = millis();
     }
 
     digitalWrite(Pins::ANT_LED, isTelemetryEnable);
+    digitalWrite(Pins::POW_LED, isPowerEnable);
+
+    
 }

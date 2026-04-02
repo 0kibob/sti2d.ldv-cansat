@@ -17,7 +17,9 @@ const uint8_t RADIO_SYNC = 18;
 constexpr uint8_t BUFFER_SIZE = 1;
 constexpr uint32_t SAMPLE_PERIOD = 100;
 
-const uint32_t DEBOUNCE = 200;
+const uint32_t DEBOUNCE = 500;
+
+const float FALL_THRESHOLD = 0.045;
 
 struct Pins
 {
