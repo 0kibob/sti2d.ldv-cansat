@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+#include <ArduinoLowPower.h>
 #include <Adafruit_BME280.h>
 #include <RadioLib.h>
 #include <LSM6DS3.h>
@@ -12,6 +13,11 @@ Adafruit_BME280 bme;
 LSM6DS3 imu(I2C_MODE, LSM_ADDR);
 SX1262 radio = SX1262(new Module(Pins::WIO_NSS, Pins::WIO_DIO, Pins::WIO_NRST, Pins::WIO_BUSY));
 
+void powerWake()
+{
+    Serial.print("Wake up");
+}
+
 void setup()
 {
     Serial.begin(BAUD_RATE);
@@ -22,22 +28,23 @@ void setup()
     if (!bme.begin(BME_ADDR)) { Serial.println("BME FAIL"); }
     if (imu.begin() != 0) { Serial.println("IMU FAIL"); }
     int radioState = radio.begin(RADIO_FREQ, RADIO_BNWH, RADIO_SPFC, RADIO_CDRT, RADIO_SYNC, RADIO_POWR, 8u, 1.8f, false);
-    if (radioState != RADIOLIB_ERR_NONE) { Serial.print("WIO FAIL"); }
+    if (radioState != RADIOLIB_ERR_NONE) { Serial.print("WIO FAIL"); Serial.print(radioState); }
     pinMode(Pins::ANT_BTN, INPUT_PULLUP);
     pinMode(Pins::POW_BTN, INPUT_PULLUP);
     pinMode(Pins::ANT_LED, OUTPUT);
     pinMode(Pins::POW_LED, OUTPUT);
+    LowPower.attachInterruptWakeup(Pins::POW_BTN, powerWake, FALLING);
 
-    Serial1.print("new ");
-    Serial1.print("mission.scm");
-    Serial1.write(13);
-    while (Serial1.available()) Serial.print(Serial1.read());
-    while(1) { if(Serial1.available()) if(Serial1.read() == '>') break; }
-    Serial1.print("append ");
-    Serial1.println("mission.scm");
-    Serial1.write(13);
-    while (Serial1.available()) Serial.print(Serial1.read());
-    while(1) { if(Serial1.available()) if(Serial1.read() == '<') break; }
+    // Serial1.print("new ");
+    // Serial1.print("mission.scm");
+    // Serial1.write(13);
+    // while (Serial1.available()) Serial.print(Serial1.read());
+    // while(1) { if(Serial1.available()) if(Serial1.read() == '>') break; }
+    // Serial1.print("append ");
+    // Serial1.println("mission.scm");
+    // Serial1.write(13);
+    // while (Serial1.available()) Serial.print(Serial1.read());
+    // while(1) { if(Serial1.available()) if(Serial1.read() == '<') break; }
     Serial.print("SUCCESS INIT");
 }
 

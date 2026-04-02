@@ -14,19 +14,19 @@ const uint8_t RADIO_CDRT = 7;
 const uint8_t RADIO_POWR = 22;
 const uint8_t RADIO_SYNC = 18;
 
-constexpr uint8_t BUFFER_SIZE = 5;
-constexpr uint32_t SAMPLE_PERIOD = 1000;
+constexpr uint8_t BUFFER_SIZE = 1;
+constexpr uint32_t SAMPLE_PERIOD = 100;
 
 const uint32_t DEBOUNCE = 200;
 
 struct Pins
 {
     // POWER
-    static const uint8_t POW_BTN = D2;
+    static const uint8_t POW_BTN = D3;
     static const uint8_t POW_LED = D0;
     // ANTENNA
-    static const uint8_t ANT_BTN = D1;
-    static const uint8_t ANT_LED = D3;
+    static const uint8_t ANT_BTN = D2;
+    static const uint8_t ANT_LED = D1;
     // SERVO
     static const uint8_t SRV_DAT = D16;
     // BME280
