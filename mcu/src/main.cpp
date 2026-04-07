@@ -94,22 +94,24 @@ void loop()
 
         if (packetIndex < BUFFER_SIZE) { packetBuffer[packetIndex++] = pkt; }
         Serial1.write((uint8_t*)&pkt, sizeof(pkt));
+        Serial.write((uint8_t*)&pkt, sizeof(pkt));
         // printPacketDebug(pkt);
         
         if (packetIndex >= BUFFER_SIZE)
         {
             if (isFalling)
             {
-                Serial.write((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
-                radioState = radio.transmit((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
+                // Serial.write((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
+                // radioState = radio.transmit((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
             }
+            radioState = radio.transmit((uint8_t*)packetBuffer, packetIndex * sizeof(Packet));
             packetIndex = 0;
         }
     }
 
     if (radioState != RADIOLIB_ERR_NONE) {Serial.print("WIO ERROR");}
 
-    if (digitalRead(Pins::ANT_BTN) == LOW && millis() - lastTelemetryDebounceTime > DEBOUNCE)
+    if (digitalRead(Pins::ANT_BTN) == LOW && millis() - lastTelemetryDebounceTime > DEBOUNCE && isPowerEnable)
     {
         isTelemetryEnable = !isTelemetryEnable;
         lastTelemetryDebounceTime = millis();
@@ -117,6 +119,8 @@ void loop()
 
     if (digitalRead(Pins::POW_BTN) == LOW && millis() - lastPowerDebounceTime > DEBOUNCE)
     {
+        if (isTelemetryEnable && isPowerEnable) { isTelemetryEnable = false; }
+        else { isTelemetryEnable = true; }
         isPowerEnable = !isPowerEnable;
         lastPowerDebounceTime = millis();
     }
